@@ -1,6 +1,5 @@
 // src/content/content.js
-// Main content script with all features: table selection, preview, CSV, metadata, NL query, AI charts
-// Enhanced with AI-powered chart generation using metadata context and better error handling
+// Main content script with simplified AI analysis display
 
 let latestTable = null;
 let latestMetadata = null;
@@ -112,7 +111,7 @@ Examples:
 - What's the average salary?
 - Count by department" style="width:100%; height:80px; margin-bottom:5px; display:none; padding:5px; font-size:12px;"></textarea>
       <button id="executeNLQueryBtn" style="width:100%; margin-bottom:5px; padding:8px; background-color:#FF9800; color:white; display:none; cursor:pointer;">🔍 Execute Query</button>
-      <div id="queryResults" style="margin-top:10px; max-height:300px; overflow:auto; display:none; border:1px solid #ddd; padding:5px; background:#fff; font-size:12px;"></div>
+      <div id="queryResults" style="margin-top:10px; max-height:400px; overflow:auto; display:none; border:1px solid #ddd; padding:5px; background:#fff; font-size:12px;"></div>
       
       <!-- Chart Controls -->
       <div id="chartControls" style="margin-top:10px; display:none;">
@@ -343,7 +342,6 @@ function displayMetadata(metadata) {
   container.style.display = "block";
   container.innerHTML = "";
 
-  // Table description
   const descDiv = document.createElement("div");
   descDiv.style.marginBottom = "10px";
   descDiv.style.padding = "8px";
@@ -352,7 +350,6 @@ function displayMetadata(metadata) {
   descDiv.innerHTML = `<strong>Table Description:</strong><br>${metadata.table_description}`;
   container.appendChild(descDiv);
 
-  // Columns info
   const colsDiv = document.createElement("div");
   colsDiv.innerHTML = `<strong>Columns (${metadata.column_count}):</strong><hr style="margin:5px 0;">`;
 
@@ -374,7 +371,7 @@ function displayMetadata(metadata) {
   container.appendChild(colsDiv);
 }
 
-// --- Load Table to SQL (with auto-metadata generation and cleanup) ---
+// --- Load Table to SQL ---
 async function loadTableToSQL() {
   if (!latestTable) return alert("No table selected. Please select a table first.");
   
@@ -383,14 +380,12 @@ async function loadTableToSQL() {
   btn.innerText = "⏳ Loading...";
   
   try {
-    // CLEAN UP OLD DATABASE IF EXISTS
     if (sqlManager) {
       console.log("Cleaning up previous SQL database...");
       sqlManager.destroy();
       sqlManager = null;
     }
     
-    // AUTO-GENERATE METADATA IF NOT EXISTS
     if (!latestMetadata) {
       btn.innerText = "⏳ Generating metadata...";
       console.log("Auto-generating metadata for better SQL queries...");
@@ -407,7 +402,6 @@ async function loadTableToSQL() {
       console.log("✅ Metadata auto-generated");
     }
     
-    // Now load to SQL with metadata
     btn.innerText = "⏳ Loading to SQL...";
     sqlManager = new SQLQueryManager();
     await sqlManager.initialize();
@@ -417,7 +411,6 @@ async function loadTableToSQL() {
       latestMetadata
     );
     
-    // Show query interface
     document.getElementById("nlQueryInput").style.display = "block";
     document.getElementById("executeNLQueryBtn").style.display = "block";
     
@@ -434,7 +427,7 @@ async function loadTableToSQL() {
   }
 }
 
-// --- Execute Natural Language Query ---
+// --- Execute Natural Language Query with Simplified AI Analysis ---
 async function executeNaturalLanguageQuery() {
   if (!sqlManager) return alert("Load table to SQL first!");
   
@@ -447,37 +440,101 @@ async function executeNaturalLanguageQuery() {
   btn.disabled = true;
   btn.innerText = "⏳ Querying...";
   resultsDiv.style.display = "block";
-  resultsDiv.innerHTML = "<p style='padding:10px;'>🤖 Processing your question...</p>";
+  resultsDiv.innerHTML = "<p style='padding:10px;'>🤖 Processing your question and generating insights...</p>";
   
-  // Hide chart controls initially
   document.getElementById("chartControls").style.display = "none";
   document.getElementById("chartContainer").style.display = "none";
   
   try {
-    const { sql, explanation, results } = await sqlManager.queryWithNaturalLanguage(question);
+    const { sql, explanation, results, analysis } = await sqlManager.queryWithNaturalLanguage(question);
     
-    // Store results for charting
-    latestQueryResults = { question, sql, explanation, results };
+    latestQueryResults = { question, sql, explanation, results, analysis };
     
-    // Display results header
-    resultsDiv.innerHTML = `
-      <div style="margin-bottom:10px; padding:8px; background:#e8f5e9; border-radius:4px;">
-        <strong>Question:</strong> ${question}<br>
-        <strong>SQL:</strong> <code style="background:#fff; padding:2px 4px; display:block; margin-top:4px;">${sql}</code>
-        ${explanation ? `<strong>Explanation:</strong> ${explanation}` : ''}
-      </div>
+    resultsDiv.innerHTML = '';
+    
+    // === 1. DISPLAY SIMPLIFIED AI ANALYSIS ===
+    if (analysis) {
+      const analysisDiv = document.createElement("div");
+      analysisDiv.style.marginBottom = "15px";
+      analysisDiv.style.padding = "12px";
+      analysisDiv.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+      analysisDiv.style.borderRadius = "8px";
+      analysisDiv.style.color = "white";
+      analysisDiv.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
+      
+      analysisDiv.innerHTML = `
+        <div style="margin-bottom:12px;">
+          <strong style="font-size:14px;">💡 AI Analysis</strong>
+        </div>
+        
+        <div style="background:rgba(255,255,255,0.15); padding:12px; border-radius:6px; margin-bottom:10px;">
+          <span style="font-size:13px; line-height:1.5;">${analysis.directAnswer}</span>
+        </div>
+        
+        ${analysis.keyInsights && analysis.keyInsights.length > 0 ? `
+        <div style="background:rgba(255,255,255,0.15); padding:12px; border-radius:6px;">
+          <strong style="margin-bottom:8px; display:block;">Key Insights:</strong>
+          <ul style="margin:0; padding-left:20px; font-size:12px; line-height:1.6;">
+            ${analysis.keyInsights.map(insight => `<li style="margin-bottom:6px;">${insight}</li>`).join('')}
+          </ul>
+        </div>
+        ` : ''}
+      `;
+      
+      resultsDiv.appendChild(analysisDiv);
+    }
+    
+    // === 2. DISPLAY SQL QUERY INFO (Collapsible) ===
+    const sqlInfoDiv = document.createElement("div");
+    sqlInfoDiv.style.marginBottom = "10px";
+    sqlInfoDiv.style.padding = "8px";
+    sqlInfoDiv.style.background = "#f0f0f0";
+    sqlInfoDiv.style.borderRadius = "4px";
+    sqlInfoDiv.style.fontSize = "11px";
+    sqlInfoDiv.style.borderLeft = "3px solid #2196F3";
+    
+    sqlInfoDiv.innerHTML = `
+      <details>
+        <summary style="cursor:pointer; font-weight:bold; color:#2196F3;">
+          🔍 Query Details (click to expand)
+        </summary>
+        <div style="margin-top:8px;">
+          <strong>Question:</strong> ${question}<br>
+          <strong>SQL:</strong> <code style="background:#fff; padding:2px 4px; display:block; margin-top:4px; border-radius:2px;">${sql}</code>
+          ${explanation ? `<strong>Explanation:</strong> ${explanation}` : ''}
+        </div>
+      </details>
     `;
     
+    resultsDiv.appendChild(sqlInfoDiv);
+    
+    // === 3. DISPLAY RAW DATA TABLE (Collapsible) ===
     if (results.values.length === 0) {
-      resultsDiv.innerHTML += '<p style="padding:10px; color:#666;">No results found.</p>';
+      const noResultsDiv = document.createElement("div");
+      noResultsDiv.style.padding = "10px";
+      noResultsDiv.style.color = "#666";
+      noResultsDiv.style.textAlign = "center";
+      noResultsDiv.style.background = "#f9f9f9";
+      noResultsDiv.style.borderRadius = "4px";
+      noResultsDiv.innerText = "No results found.";
+      resultsDiv.appendChild(noResultsDiv);
     } else {
-      // Create results table
+      const tableContainer = document.createElement("div");
+      tableContainer.style.marginTop = "10px";
+      
+      const tableToggle = document.createElement("details");
+      tableToggle.innerHTML = `
+        <summary style="cursor:pointer; padding:8px; background:#e8f5e9; border-radius:4px; font-weight:bold; color:#4CAF50; margin-bottom:10px;">
+          📊 View Raw Data (${results.values.length} rows)
+        </summary>
+      `;
+      
       const table = document.createElement("table");
       table.style.borderCollapse = "collapse";
       table.style.width = "100%";
       table.style.fontSize = "11px";
+      table.style.marginTop = "10px";
       
-      // Header
       const thead = document.createElement("thead");
       const trHead = document.createElement("tr");
       results.columns.forEach(col => {
@@ -492,7 +549,6 @@ async function executeNaturalLanguageQuery() {
       thead.appendChild(trHead);
       table.appendChild(thead);
       
-      // Body
       const tbody = document.createElement("tbody");
       results.values.forEach(row => {
         const tr = document.createElement("tr");
@@ -507,17 +563,10 @@ async function executeNaturalLanguageQuery() {
       });
       table.appendChild(tbody);
       
-      resultsDiv.appendChild(table);
+      tableToggle.appendChild(table);
+      tableContainer.appendChild(tableToggle);
+      resultsDiv.appendChild(tableContainer);
       
-      // Add row count
-      const countDiv = document.createElement("div");
-      countDiv.style.marginTop = "5px";
-      countDiv.style.fontSize = "11px";
-      countDiv.style.color = "#666";
-      countDiv.innerText = `${results.values.length} row(s) returned`;
-      resultsDiv.appendChild(countDiv);
-      
-      // Show chart controls if data is suitable
       if (results.columns.length >= 1 && results.values.length > 0) {
         document.getElementById("chartControls").style.display = "block";
       }
@@ -534,7 +583,7 @@ async function executeNaturalLanguageQuery() {
   }
 }
 
-// --- Generate Chart from Results (AI-Powered with better error handling) ---
+// --- Generate Chart from Results ---
 async function generateChartFromResults() {
   console.log("🎨 Starting chart generation...");
   
@@ -560,7 +609,6 @@ async function generateChartFromResults() {
     
     console.log("📊 Chart container shown, calling generateChartWithAI...");
     
-    // Use AI to generate chart with metadata context
     const result = await chartGenerator.generateChartWithAI(
       chartContainer,
       latestMetadata,
@@ -596,31 +644,26 @@ async function generateChartFromResults() {
 
 // --- Close Sidebar (with cleanup) ---
 function closeSidebar() {
-  // Clean up SQL database
   if (sqlManager) {
     sqlManager.destroy();
     sqlManager = null;
   }
   
-  // Clean up AI generator
   if (aiGenerator) {
     aiGenerator.closeSession();
     aiGenerator = null;
   }
   
-  // Clean up chart generator
   if (chartGenerator) {
     chartGenerator.destroy();
     chartGenerator = null;
   }
   
-  // Remove sidebar
   if (sidebar) {
     sidebar.remove();
     sidebar = null;
   }
   
-  // Reset state
   latestTable = null;
   latestMetadata = null;
   latestQueryResults = null;

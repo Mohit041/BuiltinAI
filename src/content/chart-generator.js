@@ -569,7 +569,7 @@ CRITICAL REQUIREMENTS:
     };
   }
 
-  // Generate chart from SQL results with AI recommendation
+  // Generate chart from SQL results with AI recommendation (CLEAN DISPLAY)
   async generateChartWithAI(container, metadata, queryQuestion, columns, values) {
     // Destroy existing chart
     if (this.currentChart) {
@@ -620,14 +620,9 @@ CRITICAL REQUIREMENTS:
 
       console.log('✅ AI Recommendation received:', recommendation);
 
-      // Create enhanced container with proper sizing
+      // UPDATED: Create simple container without AI recommendation box - just the chart
       container.innerHTML = `
-        <div style="margin-bottom:10px; padding:8px; background:#e3f2fd; border-radius:4px; font-size:11px;">
-          <strong>🤖 AI Recommendation:</strong> ${recommendation.chartType.toUpperCase()} chart<br>
-          <strong>Why:</strong> ${recommendation.reasoning || 'Best fit for this data'}<br>
-          <strong>Axes:</strong> X="${recommendation.xAxis}", Y="${recommendation.yAxis}"
-        </div>
-        <div style="position:relative; height:400px; width:100%; background:#fff;">
+        <div style="position:relative; height:450px; width:100%; background:#fff; padding:10px;">
           <canvas id="aiGeneratedChart"></canvas>
         </div>
       `;
