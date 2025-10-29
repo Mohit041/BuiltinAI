@@ -13,16 +13,19 @@
   "background": {
     "service_worker": "src/background/background.js"
   },
-  "web_accessible_resources": [{
-    "resources": ["lib/sql-wasm.wasm"],
-    "matches": ["<all_urls>"]
-  }],
+  "web_accessible_resources": [
+    {
+      "resources": ["lib/sql-wasm.wasm"],
+      "matches": ["<all_urls>"]
+    }
+  ],
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
       "js": [
         "lib/sql-wasm.js",
         "lib/chart.umd.js",
+        "lib/html2canvas.min.js",
         "src/content/ai-metadata.js",
         "src/content/sql-query.js",
         "src/content/chart-generator.js",

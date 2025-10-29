@@ -1,5 +1,5 @@
 // src/content/content.js
-// Main content script with simplified AI analysis display
+// Main content script with all features including Chart Vision Analysis
 
 let latestTable = null;
 let latestMetadata = null;
@@ -12,6 +12,11 @@ let isGeneratingMetadata = false;
 let sqlManager = null;
 let chartGenerator = null;
 let latestQueryResults = null;
+
+// Chart Vision Analysis variables
+let chartSelectionActive = false;
+let chartSelectionOverlay = null;
+let chartStartX = 0, chartStartY = 0;
 
 // Initialize AI Generator
 function initializeAI() {
@@ -127,6 +132,13 @@ Examples:
       <button id="downloadMetadataBtn" style="width:100%; margin-bottom:5px; padding:8px; cursor:pointer;">📥 Download Metadata JSON</button>
     </div>
     
+    <!-- Chart Vision Analysis -->
+    <div style="border-bottom: 2px solid #ddd; padding-bottom: 10px; margin-bottom: 10px;">
+      <h4 style="margin: 5px 0;">5. Analyze Any Chart (AI Vision)</h4>
+      <button id="selectChartBtn" style="width:100%; margin-bottom:5px; padding:8px; background-color:#FF6B6B; color:white; cursor:pointer;">📸 Select & Analyze Chart</button>
+      <div id="chartAnalysisResults" style="margin-top:10px; max-height:400px; overflow:auto; display:none; border:1px solid #ddd; padding:5px; background:#fff; font-size:12px;"></div>
+    </div>
+    
     <!-- JSON View -->
     <div style="margin-bottom: 10px;">
       <button id="viewJSONBtn" style="width:100%; margin-bottom:5px; padding:8px; cursor:pointer;">📄 View JSON</button>
@@ -142,7 +154,7 @@ Examples:
 
   document.body.appendChild(sidebar);
 
-  // Event listeners for all features
+  // Event listeners
   document.getElementById("selectTableBtn").addEventListener("click", enableRectangleSelection);
   document.getElementById("previewTableBtn").addEventListener("click", showPreview);
   document.getElementById("generateMetadataBtn").addEventListener("click", generateMetadata);
@@ -152,6 +164,7 @@ Examples:
   document.getElementById("downloadCSVBtn").addEventListener("click", downloadCSV);
   document.getElementById("downloadMetadataBtn").addEventListener("click", downloadMetadataJSON);
   document.getElementById("viewJSONBtn").addEventListener("click", toggleJSONView);
+  document.getElementById("selectChartBtn").addEventListener("click", startChartSelection);
   document.getElementById("closeSidebarBtn").addEventListener("click", closeSidebar);
 }
 
@@ -427,7 +440,7 @@ async function loadTableToSQL() {
   }
 }
 
-// --- Execute Natural Language Query with Simplified AI Analysis ---
+// --- Execute Natural Language Query ---
 async function executeNaturalLanguageQuery() {
   if (!sqlManager) return alert("Load table to SQL first!");
   
@@ -452,7 +465,7 @@ async function executeNaturalLanguageQuery() {
     
     resultsDiv.innerHTML = '';
     
-    // === 1. DISPLAY SIMPLIFIED AI ANALYSIS ===
+    // Display AI Analysis
     if (analysis) {
       const analysisDiv = document.createElement("div");
       analysisDiv.style.marginBottom = "15px";
@@ -484,7 +497,7 @@ async function executeNaturalLanguageQuery() {
       resultsDiv.appendChild(analysisDiv);
     }
     
-    // === 2. DISPLAY SQL QUERY INFO (Collapsible) ===
+    // Display SQL Query Info
     const sqlInfoDiv = document.createElement("div");
     sqlInfoDiv.style.marginBottom = "10px";
     sqlInfoDiv.style.padding = "8px";
@@ -508,7 +521,7 @@ async function executeNaturalLanguageQuery() {
     
     resultsDiv.appendChild(sqlInfoDiv);
     
-    // === 3. DISPLAY RAW DATA TABLE (Collapsible) ===
+    // Display Raw Data Table
     if (results.values.length === 0) {
       const noResultsDiv = document.createElement("div");
       noResultsDiv.style.padding = "10px";
@@ -607,8 +620,6 @@ async function generateChartFromResults() {
     const chartContainer = document.getElementById("chartContainer");
     chartContainer.style.display = "block";
     
-    console.log("📊 Chart container shown, calling generateChartWithAI...");
-    
     const result = await chartGenerator.generateChartWithAI(
       chartContainer,
       latestMetadata,
@@ -619,8 +630,6 @@ async function generateChartFromResults() {
     
     if (result) {
       console.log("✅ Chart generation completed successfully");
-    } else {
-      console.log("⚠️ Chart generation returned null");
     }
     
   } catch (error) {
@@ -629,11 +638,7 @@ async function generateChartFromResults() {
     chartContainer.innerHTML = `
       <div style="padding:15px; color:#c62828; border:1px solid #ffcdd2; background:#ffebee; border-radius:4px;">
         <strong>❌ Chart Generation Failed</strong><br>
-        ${error.message}<br><br>
-        <strong>Debug Steps:</strong><br>
-        1. Open browser console (F12)<br>
-        2. Check for Chart.js loading errors<br>
-        3. Verify lib/chart.umd.js exists
+        ${error.message}
       </div>
     `;
   } finally {
@@ -642,7 +647,358 @@ async function generateChartFromResults() {
   }
 }
 
-// --- Close Sidebar (with cleanup) ---
+// ========================================
+// CHART VISION ANALYSIS
+// ========================================
+
+// Check AI Availability
+async function checkAIAvailability() {
+  try {
+    if (typeof LanguageModel === 'undefined') {
+      return {
+        available: false,
+        message: "LanguageModel API not found. Enable chrome://flags/#prompt-api-for-gemini-nano"
+      };
+    }
+    
+    try {
+      const testSession = await LanguageModel.create({
+        initialPrompts: [{ role: 'system', content: 'Test' }],
+        language: 'en'
+      });
+      testSession.destroy?.();
+      
+      return {
+        available: true,
+        message: "AI ready for vision analysis"
+      };
+    } catch (sessionError) {
+      return {
+        available: false,
+        message: `Model not ready: ${sessionError.message}`
+      };
+    }
+    
+  } catch (error) {
+    return {
+      available: false,
+      message: `Error: ${error.message}`
+    };
+  }
+}
+
+async function startChartSelection() {
+  if (chartSelectionActive) return;
+  
+  const aiStatus = await checkAIAvailability();
+  
+  if (!aiStatus.available) {
+    alert(`⚠️ AI Vision Not Available\n\n${aiStatus.message}\n\nSetup Instructions:\n1. Go to chrome://flags/#prompt-api-for-gemini-nano\n2. Set to "Enabled"\n3. Go to chrome://flags/#optimization-guide-on-device-model\n4. Set to "Enabled BypassPerfRequirement"\n5. Restart Chrome\n6. Check chrome://components/ for model download`);
+    return;
+  }
+  
+  alert("📸 Chart Screenshot Mode\n\nDraw a rectangle around the chart or area you want to analyze.\n\nPress ESC to cancel.");
+  
+  chartSelectionActive = true;
+  
+  chartSelectionOverlay = document.createElement("div");
+  chartSelectionOverlay.style.position = "absolute";
+  chartSelectionOverlay.style.border = "3px solid #FF6B6B";
+  chartSelectionOverlay.style.backgroundColor = "rgba(255, 107, 107, 0.2)";
+  chartSelectionOverlay.style.pointerEvents = "none";
+  chartSelectionOverlay.style.zIndex = "99997";
+  chartSelectionOverlay.style.display = "none";
+  document.body.appendChild(chartSelectionOverlay);
+  
+  document.addEventListener("mousedown", onChartMouseDown);
+  document.addEventListener("keydown", cancelChartSelection);
+}
+
+function onChartMouseDown(e) {
+  if (!chartSelectionActive) return;
+  if (e.target.closest("#smartTableSidebar")) return;
+  
+  chartStartX = e.pageX;
+  chartStartY = e.pageY;
+  
+  chartSelectionOverlay.style.left = chartStartX + "px";
+  chartSelectionOverlay.style.top = chartStartY + "px";
+  chartSelectionOverlay.style.width = "0px";
+  chartSelectionOverlay.style.height = "0px";
+  chartSelectionOverlay.style.display = "block";
+  
+  document.addEventListener("mousemove", onChartMouseMove);
+  document.addEventListener("mouseup", onChartMouseUp);
+}
+
+function onChartMouseMove(e) {
+  if (!chartSelectionActive) return;
+  
+  const x = Math.min(e.pageX, chartStartX);
+  const y = Math.min(e.pageY, chartStartY);
+  const w = Math.abs(e.pageX - chartStartX);
+  const h = Math.abs(e.pageY - chartStartY);
+  
+  chartSelectionOverlay.style.left = x + "px";
+  chartSelectionOverlay.style.top = y + "px";
+  chartSelectionOverlay.style.width = w + "px";
+  chartSelectionOverlay.style.height = h + "px";
+}
+
+async function onChartMouseUp(e) {
+  if (!chartSelectionActive) return;
+  
+  document.removeEventListener("mousemove", onChartMouseMove);
+  document.removeEventListener("mouseup", onChartMouseUp);
+  
+  const rect = {
+    x: parseInt(chartSelectionOverlay.style.left),
+    y: parseInt(chartSelectionOverlay.style.top),
+    width: parseInt(chartSelectionOverlay.style.width),
+    height: parseInt(chartSelectionOverlay.style.height)
+  };
+  
+  if (rect.width < 50 || rect.height < 50) {
+    cleanupChartSelection();
+    alert("Selection too small. Please select a larger area.");
+    return;
+  }
+  
+  cleanupChartSelection();
+  await captureAndAnalyzeSelectedArea(rect);
+}
+
+function cancelChartSelection(e) {
+  if (e.key === "Escape" && chartSelectionActive) {
+    cleanupChartSelection();
+    alert("Chart selection cancelled.");
+  }
+}
+
+function cleanupChartSelection() {
+  chartSelectionActive = false;
+  document.removeEventListener("mousedown", onChartMouseDown);
+  document.removeEventListener("mousemove", onChartMouseMove);
+  document.removeEventListener("mouseup", onChartMouseUp);
+  document.removeEventListener("keydown", cancelChartSelection);
+  
+  if (chartSelectionOverlay) {
+    chartSelectionOverlay.remove();
+    chartSelectionOverlay = null;
+  }
+}
+
+async function captureAndAnalyzeSelectedArea(rect) {
+  const resultsDiv = document.getElementById("chartAnalysisResults");
+  resultsDiv.style.display = "block";
+  resultsDiv.innerHTML = "<p style='padding:10px;'>📸 Capturing selected area...</p>";
+  
+  try {
+    const imageData = await captureRectangleAsImage(rect);
+    resultsDiv.innerHTML = "<p style='padding:10px;'>🤖 Analyzing chart with AI Vision...</p>";
+    const analysis = await analyzeChartWithVisionAPI(imageData);
+    displayChartAnalysisResults(resultsDiv, analysis, imageData);
+  } catch (error) {
+    console.error("Chart analysis error:", error);
+    resultsDiv.innerHTML = `
+      <div style="padding:10px; background:#ffebee; border-radius:4px; color:#c62828;">
+        <strong>❌ Error:</strong> ${error.message}
+      </div>
+    `;
+  }
+}
+
+async function captureRectangleAsImage(rect) {
+  try {
+    console.log("📸 Capturing rectangle area:", rect);
+    
+    if (typeof html2canvas !== 'undefined') {
+      console.log("Using html2canvas for capture");
+      
+      const canvas = await html2canvas(document.body, {
+        x: rect.x,
+        y: rect.y,
+        width: rect.width,
+        height: rect.height,
+        scrollX: 0,
+        scrollY: 0,
+        windowWidth: document.documentElement.scrollWidth,
+        windowHeight: document.documentElement.scrollHeight,
+        useCORS: true,
+        allowTaint: true,
+        logging: false
+      });
+      
+      const imageData = canvas.toDataURL('image/png');
+      console.log("✅ Screenshot captured");
+      return imageData;
+    }
+    
+    console.log("html2canvas not available, using fallback");
+    const canvas = document.createElement('canvas');
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+    const ctx = canvas.getContext('2d');
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    
+    return canvas.toDataURL('image/png');
+    
+  } catch (error) {
+    console.error("Error capturing rectangle:", error);
+    throw new Error(`Screenshot failed: ${error.message}`);
+  }
+}
+
+async function analyzeChartWithVisionAPI(imageData) {
+  try {
+    console.log("🔍 Creating multimodal AI session...");
+    
+    if (typeof LanguageModel === 'undefined') {
+      throw new Error("LanguageModel API not available");
+    }
+    
+    const session = await LanguageModel.create({
+      initialPrompts: [
+        {
+          role: 'system',
+          content: 'You are an expert data visualization analyst who provides detailed insights about charts, graphs, and visual data representations.'
+        }
+      ],
+      expectedInputs: [{ type: 'image' }],
+      language: 'en'
+    });
+    
+    console.log("✅ Session created successfully");
+    
+    const imageFile = await base64ToFile(imageData, 'chart.png');
+    console.log("✅ Image file ready");
+    
+    await session.append([
+      {
+        role: 'user',
+        content: [
+          {
+            type: 'text',
+            value: `Analyze this chart/graph image in detail.
+
+Provide your analysis in the following JSON format:
+{
+  "chartDescription": "2-3 sentences describing what type of chart this is, what data it shows, and what the axes/labels represent",
+  "visualObservations": [
+    "First observation about patterns, trends, or distributions you see",
+    "Second observation about standout elements, peaks, or valleys",
+    "Third observation about the data distribution or layout",
+    "Fourth observation about any anomalies or notable features"
+  ],
+  "keyInsights": [
+    "First key insight about what the data tells us",
+    "Second insight about comparisons or relationships",
+    "Third insight about findings or conclusions",
+    "Fourth insight connecting data points or showing meaning"
+  ]
+}
+
+Be specific with numbers, names, and values you see in the chart.`
+          },
+          {
+            type: 'image',
+            value: imageFile
+          }
+        ]
+      }
+    ]);
+    
+    console.log("✅ Image appended to session");
+    
+    const result = await session.prompt("Provide the analysis in the JSON format specified above.");
+    console.log("✅ Raw response:", result);
+    
+    let analysis;
+    try {
+      const jsonMatch = result.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        analysis = JSON.parse(jsonMatch[0]);
+      } else {
+        analysis = JSON.parse(result);
+      }
+    } catch (parseError) {
+      console.warn("JSON parse failed, using fallback:", parseError);
+      analysis = {
+        chartDescription: result.substring(0, 200),
+        visualObservations: ["Full response: " + result.substring(0, 150)],
+        keyInsights: ["See full analysis above"]
+      };
+    }
+    
+    console.log("✅ Analysis complete:", analysis);
+    
+    if (session.destroy) {
+      session.destroy();
+    }
+    
+    return analysis;
+    
+  } catch (error) {
+    console.error("❌ Vision API error:", error);
+    throw new Error(`Vision API failed: ${error.message}\n\nMake sure:\n1. Flags enabled at chrome://flags\n2. Model downloaded at chrome://components/\n3. Using Chrome 139+ or Canary`);
+  }
+}
+
+async function base64ToFile(base64Data, filename) {
+  const base64 = base64Data.includes(',') ? base64Data.split(',')[1] : base64Data;
+  
+  const byteString = atob(base64);
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  
+  const blob = new Blob([ab], { type: 'image/png' });
+  return new File([blob], filename, { type: 'image/png' });
+}
+
+function displayChartAnalysisResults(container, analysis, imageData) {
+  container.innerHTML = `
+    <div style="margin-bottom:15px; text-align:center;">
+      <img src="${imageData}" style="max-width:100%; border-radius:4px; box-shadow:0 2px 4px rgba(0,0,0,0.1);" alt="Chart Screenshot">
+    </div>
+    
+    <div style="padding:15px; background:linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius:8px; color:white; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
+      <div style="margin-bottom:12px;">
+        <strong style="font-size:14px;">👁️ AI Vision Analysis</strong>
+      </div>
+      
+      ${analysis.chartDescription ? `
+      <div style="background:rgba(255,255,255,0.15); padding:12px; border-radius:6px; margin-bottom:10px;">
+        <strong style="display:block; margin-bottom:8px;">Summary:</strong>
+        <span style="font-size:12px; line-height:1.6;">${analysis.chartDescription}</span>
+      </div>
+      ` : ''}
+      
+      ${analysis.visualObservations && analysis.visualObservations.length > 0 ? `
+      <div style="background:rgba(255,255,255,0.15); padding:12px; border-radius:6px; margin-bottom:10px;">
+        <strong style="display:block; margin-bottom:8px;">Observations:</strong>
+        <ul style="margin:0; padding-left:20px; font-size:12px; line-height:1.6;">
+          ${analysis.visualObservations.map(obs => `<li style="margin-bottom:6px;">${obs}</li>`).join('')}
+        </ul>
+      </div>
+      ` : ''}
+      
+      ${analysis.keyInsights && analysis.keyInsights.length > 0 ? `
+      <div style="background:rgba(255,255,255,0.15); padding:12px; border-radius:6px;">
+        <strong style="display:block; margin-bottom:8px;">Key Insights:</strong>
+        <ul style="margin:0; padding-left:20px; font-size:12px; line-height:1.6;">
+          ${analysis.keyInsights.map(insight => `<li style="margin-bottom:6px;">${insight}</li>`).join('')}
+        </ul>
+      </div>
+      ` : ''}
+    </div>
+  `;
+}
+
 function closeSidebar() {
   if (sqlManager) {
     sqlManager.destroy();
@@ -662,6 +1018,10 @@ function closeSidebar() {
   if (sidebar) {
     sidebar.remove();
     sidebar = null;
+  }
+  
+  if (chartSelectionActive) {
+    cleanupChartSelection();
   }
   
   latestTable = null;
