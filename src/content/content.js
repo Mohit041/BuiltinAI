@@ -390,10 +390,10 @@ function enableRectangleSelection() {
     if (tables.length > 0) {
       latestTable = parseTableElement(tables[0]);
       alert(`✓ Table selected! ${latestTable.data.length} rows, ${latestTable.headers.length} columns.`);
-      alert(`✓ Table selected! ${latestTable.data.length} rows, ${latestTable.headers.length} columns.`);
+
     } else {
       alert("⚠ No table detected in selection.");
-      alert("⚠ No table detected in selection.");
+
     }
 
     cleanup();
@@ -496,7 +496,7 @@ async function loadTableToSQL() {
   const btn = document.getElementById("loadToSQLBtn");
   btn.disabled = true;
   btn.innerText = "◐ Loading...";
-  btn.innerText = "◐ Loading...";
+
   
   try {
     if (sqlManager) {
@@ -507,7 +507,7 @@ async function loadTableToSQL() {
     
     if (!latestMetadata) {
       btn.innerText = "◐ Analyzing data...";
-      btn.innerText = "◐ Analyzing data...";
+
       console.log("Auto-generating metadata for better SQL queries...");
       
       initializeAI();
@@ -519,11 +519,11 @@ async function loadTableToSQL() {
       document.getElementById("jsonView").value = JSON.stringify(latestMetadata, null, 2);
       
       console.log("✓ Metadata auto-generated");
-      console.log("✓ Metadata auto-generated");
+
     }
     
     btn.innerText = "◐ Loading to SQL...";
-    btn.innerText = "◐ Loading to SQL...";
+
     sqlManager = new SQLQueryManager();
     await sqlManager.initialize();
     await sqlManager.createTableFromJSON(
@@ -536,15 +536,13 @@ async function loadTableToSQL() {
     document.getElementById("executeNLQueryBtn").style.display = "block";
     
     btn.innerText = "✓ Loaded Successfully";
-    btn.innerText = "✓ Loaded Successfully";
+
     btn.style.background = "rgba(34, 197, 94, 0.8)";
     alert(`✓ Data ready for queries!\n\n${latestTable.data.length} rows loaded with AI analysis.\n\nYou can now ask questions about your data.`);
-    alert(`✓ Data ready for queries!\n\n${latestTable.data.length} rows loaded with AI analysis.\n\nYou can now ask questions about your data.`);
+
     
   } catch (error) {
     console.error("Error loading table to SQL:", error);
-    alert("✗ Error loading table. Check console for details.");
-    btn.innerText = "▶ Load to SQL Database";
     alert("✗ Error loading table. Check console for details.");
     btn.innerText = "▶ Load to SQL Database";
     btn.style.background = "rgba(34, 197, 94, 0.8)";
@@ -564,9 +562,9 @@ async function executeNaturalLanguageQuery() {
   
   btn.disabled = true;
   btn.innerText = "◐ Querying...";
-  btn.innerText = "◐ Querying...";
+
   resultsDiv.style.display = "block";
-  resultsDiv.innerHTML = "<p style='padding:10px;'>◈ Processing your question and generating insights...</p>";
+
   resultsDiv.innerHTML = "<p style='padding:10px;'>◈ Processing your question and generating insights...</p>";
   
   document.getElementById("chartControls").style.display = "none";
@@ -654,7 +652,7 @@ async function executeNaturalLanguageQuery() {
       tableToggle.innerHTML = `
         <summary style="cursor:pointer; padding:8px; background:rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border-radius:8px; font-weight:bold; color:#000000; margin-bottom:10px;">
           ▦ View Raw Data (${results.values.length} rows)
-          ▦ View Raw Data (${results.values.length} rows)
+
         </summary>
       `;
       
@@ -707,11 +705,11 @@ async function executeNaturalLanguageQuery() {
     console.error("Query error:", error);
     resultsDiv.innerHTML = `<div style="padding:12px; background:#ffebee; border-radius:8px; color:#c62828; border-left: 4px solid #f44336;">
       <strong>✗ Error:</strong> ${error.message}
-      <strong>✗ Error:</strong> ${error.message}
+
     </div>`;
   } finally {
     btn.innerText = "▷ Execute Query";
-    btn.innerText = "▷ Execute Query";
+
     btn.disabled = false;
   }
 }
@@ -719,7 +717,7 @@ async function executeNaturalLanguageQuery() {
 // --- Generate Chart from Results ---
 async function generateChartFromResults() {
   console.log("▦ Starting chart generation...");
-  console.log("▦ Starting chart generation...");
+
   
   if (!latestQueryResults) {
     alert("No query results available. Execute a query first.");
@@ -734,7 +732,7 @@ async function generateChartFromResults() {
   const btn = document.getElementById("generateChartBtn");
   btn.disabled = true;
   btn.innerText = "◐ Generating...";
-  btn.innerText = "◐ Generating...";
+
   
   try {
     initializeChartGenerator();
@@ -752,23 +750,23 @@ async function generateChartFromResults() {
     
     if (result) {
       console.log("✓ Chart generation completed successfully");
-      console.log("✓ Chart generation completed successfully");
+
     }
     
   } catch (error) {
     console.error("✗ Chart generation error:", error);
-    console.error("✗ Chart generation error:", error);
+
     const chartContainer = document.getElementById("chartContainer");
     chartContainer.innerHTML = `
       <div style="padding:15px; color:#c62828; border:2px solid #ffcdd2; background:#ffebee; border-radius:8px;">
         <strong>✗ Chart Generation Failed</strong><br>
-        <strong>✗ Chart Generation Failed</strong><br>
+
         ${error.message}
       </div>
     `;
   } finally {
     btn.innerText = "▦ Visualize with AI Chart";
-    btn.innerText = "▦ Visualize with AI Chart";
+
     btn.disabled = false;
   }
 }
@@ -819,12 +817,12 @@ async function startChartSelection() {
   
   if (!aiStatus.available) {
     alert(`⚠ AI Vision Not Available\n\n${aiStatus.message}\n\nSetup Instructions:\n1. Go to chrome://flags/#prompt-api-for-gemini-nano\n2. Set to "Enabled"\n3. Go to chrome://flags/#optimization-guide-on-device-model\n4. Set to "Enabled BypassPerfRequirement"\n5. Restart Chrome\n6. Check chrome://components/ for model download`);
-    alert(`⚠ AI Vision Not Available\n\n${aiStatus.message}\n\nSetup Instructions:\n1. Go to chrome://flags/#prompt-api-for-gemini-nano\n2. Set to "Enabled"\n3. Go to chrome://flags/#optimization-guide-on-device-model\n4. Set to "Enabled BypassPerfRequirement"\n5. Restart Chrome\n6. Check chrome://components/ for model download`);
+
     return;
   }
   
   alert("◎ Chart Analysis Mode\n\nDraw a rectangle around the chart or image you want to analyze.\n\nPress ESC to cancel.");
-  alert("◎ Chart Analysis Mode\n\nDraw a rectangle around the chart or image you want to analyze.\n\nPress ESC to cancel.");
+
   
   chartSelectionActive = true;
   
@@ -919,12 +917,12 @@ async function captureAndAnalyzeSelectedArea(rect) {
   const resultsDiv = document.getElementById("chartAnalysisResults");
   resultsDiv.style.display = "block";
   resultsDiv.innerHTML = "<p style='padding:10px;'>◎ Capturing selected area...</p>";
-  resultsDiv.innerHTML = "<p style='padding:10px;'>◎ Capturing selected area...</p>";
+
   
   try {
     const imageData = await captureRectangleAsImage(rect);
     resultsDiv.innerHTML = "<p style='padding:10px;'>◈ Analyzing with AI Vision...</p>";
-    resultsDiv.innerHTML = "<p style='padding:10px;'>◈ Analyzing with AI Vision...</p>";
+
     const analysis = await analyzeChartWithVisionAPI(imageData);
     displayChartAnalysisResults(resultsDiv, analysis, imageData);
   } catch (error) {
@@ -932,7 +930,7 @@ async function captureAndAnalyzeSelectedArea(rect) {
     resultsDiv.innerHTML = `
       <div style="padding:12px; background:#ffebee; border-radius:8px; color:#c62828; border-left: 4px solid #f44336;">
         <strong>✗ Error:</strong> ${error.message}
-        <strong>✗ Error:</strong> ${error.message}
+
       </div>
     `;
   }
@@ -941,7 +939,7 @@ async function captureAndAnalyzeSelectedArea(rect) {
 async function captureRectangleAsImage(rect) {
   try {
     console.log("◎ Capturing rectangle area:", rect);
-    console.log("◎ Capturing rectangle area:", rect);
+
     
     if (typeof html2canvas !== 'undefined') {
       console.log("Using html2canvas for capture");
@@ -962,7 +960,7 @@ async function captureRectangleAsImage(rect) {
       
       const imageData = canvas.toDataURL('image/png');
       console.log("✓ Screenshot captured");
-      console.log("✓ Screenshot captured");
+
       return imageData;
     }
     
@@ -985,7 +983,7 @@ async function captureRectangleAsImage(rect) {
 async function analyzeChartWithVisionAPI(imageData) {
   try {
     console.log("◈ Creating multimodal AI session...");
-    console.log("◈ Creating multimodal AI session...");
+
     
     if (typeof LanguageModel === 'undefined') {
       throw new Error("LanguageModel API not available");
@@ -1003,11 +1001,11 @@ async function analyzeChartWithVisionAPI(imageData) {
     });
     
     console.log("✓ Session created successfully");
-    console.log("✓ Session created successfully");
+
     
     const imageFile = await base64ToFile(imageData, 'chart.png');
     console.log("✓ Image file ready");
-    console.log("✓ Image file ready");
+
     
     await session.append([
       {
@@ -1079,7 +1077,7 @@ Be specific with numbers, names, and values you see in the visualization. Focus 
     
   } catch (error) {
     console.error("✗ Vision API error:", error);
-    console.error("✗ Vision API error:", error);
+
     throw new Error(`Vision API failed: ${error.message}\n\nMake sure:\n1. Flags enabled at chrome://flags\n2. Model downloaded at chrome://components/\n3. Using Chrome 139+ or Canary`);
   }
 }
@@ -1110,8 +1108,6 @@ function displayChartAnalysisResults(container, analysis, imageData) {
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
           <div style="display: flex; align-items: center; gap: 12px;">
             <div style="background: rgba(255,255,255,0.2); padding: 8px; border-radius: 12px; backdrop-filter: blur(10px);">
-              <span style="font-size: 24px; display: block;">▦</span>
-              <span style="font-size: 24px; display: block;">▦</span>
             </div>
             <div>
               <h2 style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.025em;">Chart Analysis Results</h2>
@@ -1119,7 +1115,6 @@ function displayChartAnalysisResults(container, analysis, imageData) {
             </div>
           </div>
           <div style="background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; backdrop-filter: blur(10px);">
-            ◈ AI ANALYZED
             ◈ AI ANALYZED
           </div>
         </div>
@@ -1138,8 +1133,6 @@ function displayChartAnalysisResults(container, analysis, imageData) {
       <div style="padding: 32px;">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
           <div style="background: rgba(34, 197, 94, 0.8); backdrop-filter: blur(10px); padding: 8px; border-radius: 10px;">
-            <span style="font-size: 18px; color: white; display: block;">◈</span>
-            <span style="font-size: 18px; color: white; display: block;">◈</span>
           </div>
           <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #1f2937;">Chart Insights</h3>
         </div>
@@ -1148,8 +1141,6 @@ function displayChartAnalysisResults(container, analysis, imageData) {
           ${analysis.chartDescription ? `
             <div style="margin-bottom: 20px;">
               <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                <span style="font-size: 16px;">▤</span>
-                <span style="font-size: 16px;">▤</span>
                 <strong style="font-size: 15px; color: #000000; font-weight: 600;">Summary</strong>
               </div>
               <p style="margin: 0; font-size: 14px; line-height: 1.7; color: #374151;">${analysis.chartDescription}</p>
@@ -1159,8 +1150,6 @@ function displayChartAnalysisResults(container, analysis, imageData) {
           ${analysis.analysis && analysis.analysis.length > 0 ? `
             <div style="margin-bottom: 20px;">
               <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                <span style="font-size: 16px;">◈</span>
-                <span style="font-size: 16px;">◈</span>
                 <strong style="font-size: 15px; color: #000000; font-weight: 600;">Detailed Analysis</strong>
               </div>
               <ul style="margin: 0; padding: 0; list-style: none;">
@@ -1177,8 +1166,6 @@ function displayChartAnalysisResults(container, analysis, imageData) {
           ${analysis.keyFindings && analysis.keyFindings.length > 0 ? `
             <div>
               <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                <span style="font-size: 16px;">◉</span>
-                <span style="font-size: 16px;">◉</span>
                 <strong style="font-size: 15px; color: #000000; font-weight: 600;">Key Findings</strong>
               </div>
               <ul style="margin: 0; padding: 0; list-style: none;">
