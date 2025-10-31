@@ -91,7 +91,9 @@ function createSidebar() {
     right: 0;
     width: ${sidebarWidth}px;
     height: 100%;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(20px);
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
     box-shadow: -4px 0 20px rgba(0,0,0,0.3);
     z-index: 99999;
     padding: 0;
@@ -115,69 +117,68 @@ function createSidebar() {
       width: 8px;
     }
     #smartTableSidebar::-webkit-scrollbar-track {
-      background: rgba(255,255,255,0.1);
+      background: rgba(0, 0, 0, 0.1);
     }
     #smartTableSidebar::-webkit-scrollbar-thumb {
-      background: rgba(255,255,255,0.3);
+      background: rgba(0, 0, 0, 0.3);
       border-radius: 4px;
     }
     #smartTableSidebar::-webkit-scrollbar-thumb:hover {
-      background: rgba(255,255,255,0.5);
+      background: rgba(0, 0, 0, 0.5);
     }
     .sidebar-button {
       width: 100%;
-      padding: 12px;
-      margin-bottom: 8px;
       border: none;
-      border-radius: 8px;
-      font-size: 14px;
-      font-weight: 500;
+      border-radius: 10px;
+      font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+      font-family: inherit;
     }
     .sidebar-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      background: rgba(0, 0, 0, 0.05) !important;
+      transform: translateY(-1px);
     }
     .sidebar-button:active {
       transform: translateY(0);
     }
     .sidebar-button:disabled {
-      opacity: 0.6;
+      opacity: 0.5;
       cursor: not-allowed;
       transform: none;
     }
+    .sidebar-button:focus {
+      outline: 2px solid rgba(0, 0, 0, 0.2);
+      outline-offset: 2px;
+    }
     .section-card {
-      background: rgba(255,255,255,0.95);
-      border-radius: 12px;
-      padding: 16px;
-      margin-bottom: 16px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      border: 1px solid rgba(0, 0, 0, 0.1);
     }
     .section-title {
-      font-size: 16px;
-      font-weight: 600;
-      color: #667eea;
-      margin: 0 0 12px 0;
+      font-size: 18px;
+      font-weight: 700;
+      color: #000000;
+      margin: 0 0 20px 0;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 12px;
+      letter-spacing: -0.025em;
     }
-    .badge {
-      display: inline-block;
-      padding: 2px 8px;
-      background: #667eea;
-      color: white;
-      border-radius: 12px;
-      font-size: 11px;
-      font-weight: 600;
+    .section-title span:first-child {
+      font-size: 20px;
     }
   `;
   document.head.appendChild(style);
 
   sidebar.innerHTML = `
-    <div style="background: rgba(255,255,255,0.15); padding: 20px; backdrop-filter: blur(10px); position: relative;">
+    <div style="background: rgba(255, 255, 255, 0.1); padding: 20px; backdrop-filter: blur(15px); position: relative;">
       <button id="closeSidebarBtn" style="
         position: absolute;
         top: 8px;
@@ -185,7 +186,7 @@ function createSidebar() {
         width: 20px;
         height: 20px;
         border: none;
-        background: rgba(255,255,255,0.2);
+        background: #dc2626;
         color: white;
         border-radius: 50%;
         cursor: pointer;
@@ -194,116 +195,86 @@ function createSidebar() {
         align-items: center;
         justify-content: center;
         transition: background 0.2s;
-      " onmouseover="this.style.background='rgba(255,255,255,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+      " onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
         ✕
       </button>
-      <h2 style="margin: 0; color: white; font-size: 24px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
-        🚀 Smart Table Extractor
+      <h2 style="margin: 0; color: #000000; font-size: 24px; font-weight: 700;">
+         Smart Table Extractor
       </h2>
-      <p style="margin: 8px 0 0 0; color: rgba(255,255,255,0.9); font-size: 13px;">
+      <p style="margin: 8px 0 0 0; color: rgba(0, 0, 0, 0.7); font-size: 13px;">
         AI-powered data extraction & analysis
       </p>
     </div>
     
-    <div style="padding: 16px;">
-      <!-- Extract Table Section -->
+    <div style="padding: 20px;">
+      <!-- Data Extraction & Analysis -->
       <div class="section-card">
         <h3 class="section-title">
           <span>📊</span>
-          <span>Extract Table</span>
-          <span class="badge">Step 1</span>
+          <span>Data Extraction & Analysis</span>
         </h3>
-        <button id="selectTableBtn" class="sidebar-button" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
-          📋 Select Table Region
-        </button>
-        <button id="previewTableBtn" class="sidebar-button" style="background: #f5f7fa; color: #333;">
-          👁️ Preview Selected Data
-        </button>
-        <!-- Table Preview moved here -->
-        <div id="tablePreview" style="margin-top:12px; max-height:300px; overflow:auto; display:none; border:2px solid #667eea; border-radius:12px; padding:12px; background:#fff;"></div>
-      </div>
-      
-      <!-- AI Metadata Section -->
-      <div class="section-card">
-        <h3 class="section-title">
-          <span>🤖</span>
-          <span>AI Metadata</span>
-          <span class="badge">Step 2</span>
-        </h3>
-        <button id="generateMetadataBtn" class="sidebar-button" style="background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white;">
-          ✨ Generate Smart Metadata
-        </button>
-        <div id="metadataView" style="margin-top:12px; max-height:250px; overflow:auto; display:none; border:1px solid #e0e0e0; border-radius:8px; padding:8px; background:#fff; font-size:12px;"></div>
-      </div>
-      
-      <!-- Natural Language Query Section -->
-      <div class="section-card">
-        <h3 class="section-title">
-          <span>💬</span>
-          <span>Natural Language Query</span>
-          <span class="badge">Step 3</span>
-        </h3>
-        <button id="loadToSQLBtn" class="sidebar-button" style="background: linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%); color: white;">
-          💾 Load to SQL Database
-        </button>
-        <textarea id="nlQueryInput" placeholder="💭 Ask anything about your data...
+        <div style="display: grid; gap: 12px;">
+          <button id="selectTableBtn" class="sidebar-button" style="background: #000000; color: white; font-size: 15px; padding: 14px;">
+            📋 Select Table Region
+          </button>
+          <button id="previewTableBtn" class="sidebar-button" style="background: #ffffff; color: #000000; border: 2px solid rgba(0, 0, 0, 0.2); font-size: 15px; padding: 14px;">
+            👁️ Preview Selected Data
+          </button>
+          <button id="loadToSQLBtn" class="sidebar-button" style="background: #000000; color: white; font-size: 15px; padding: 14px;">
+            🚀 Prepare for Queries
+          </button>
+        </div>
+        
+        <div id="tablePreview" style="margin-top: 16px; max-height: 320px; overflow: auto; display: none; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; background: #ffffff;"></div>
+        
+        <textarea id="nlQueryInput" placeholder="💭 Ask questions about your data...
 
 Examples:
 • Show top 10 rows
 • What's the average of column X?
 • Count unique values in Y
-• Filter where Z > 100" style="width:100%; height:90px; margin-bottom:8px; display:none; padding:12px; font-size:13px; border:2px solid #e0e0e0; border-radius:8px; font-family: inherit; resize: vertical;"></textarea>
-        <button id="executeNLQueryBtn" class="sidebar-button" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; display:none;">
+• Filter where Z > 100" style="width: 100%; height: 100px; margin-top: 16px; display: none; padding: 16px; font-size: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; resize: vertical; line-height: 1.5;"></textarea>
+        
+        <button id="executeNLQueryBtn" class="sidebar-button" style="background: #000000; color: white; display: none; margin-top: 12px; font-size: 15px; padding: 14px;">
           🔍 Execute Query
         </button>
-        <div id="queryResults" style="margin-top:12px; max-height:400px; overflow:auto; display:none; border:1px solid #e0e0e0; border-radius:8px; padding:8px; background:#fff; font-size:12px;"></div>
         
-        <!-- Chart Controls -->
-        <div id="chartControls" style="margin-top:12px; display:none;">
-          <button id="generateChartBtn" class="sidebar-button" style="background: linear-gradient(135deg, #FA8BFF 0%, #2BD2FF 50%, #2BFF88 100%); color: white;">
-            📊 Visualize with AI Chart
+        <div id="queryResults" style="margin-top: 16px; max-height: 400px; overflow: auto; display: none; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; background: #ffffff; font-size: 13px;"></div>
+        
+        <div id="chartControls" style="margin-top: 16px; display: none;">
+          <button id="generateChartBtn" class="sidebar-button" style="background: #000000; color: white; font-size: 15px; padding: 14px;">
+            📊 Create Visualization
           </button>
         </div>
-        <div id="chartContainer" style="margin-top:12px; display:none; border:2px solid #667eea; border-radius:12px; padding:16px; background:#fff; max-height:500px; overflow:auto;"></div>
+        
+        <div id="chartContainer" style="margin-top: 16px; display: none; border: 2px solid #e2e8f0; border-radius: 12px; padding: 20px; background: #ffffff; max-height: 500px; overflow: auto;"></div>
       </div>
       
-      <!-- Download Section -->
+      <!-- Chart Insights -->
+      <div class="section-card">
+        <h3 class="section-title">
+          <span>🔍</span>
+          <span>Chart Insights</span>
+        </h3>
+        <button id="selectChartBtn" class="sidebar-button" style="background: #000000; color: white; font-size: 15px; padding: 14px;">
+          📸 Analyze Chart or Image
+        </button>
+        <div id="chartAnalysisResults" style="margin-top: 16px; max-height: 450px; overflow: auto; display: none; border-radius: 12px;"></div>
+      </div>
+      
+      <!-- Export Options -->
       <div class="section-card">
         <h3 class="section-title">
           <span>📥</span>
           <span>Export Data</span>
         </h3>
-        <button id="downloadCSVBtn" class="sidebar-button" style="background: #2ecc71; color: white;">
-          📄 Download as CSV
-        </button>
-        <button id="downloadMetadataBtn" class="sidebar-button" style="background: #3498db; color: white;">
-          📋 Download Metadata JSON
-        </button>
-      </div>
-      
-      <!-- Chart Insights Section -->
-      <div class="section-card">
-        <h3 class="section-title">
-          <span>📊</span>
-          <span>Chart Insights</span>
-          <span class="badge">AI</span>
-        </h3>
-        <button id="selectChartBtn" class="sidebar-button" style="background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%); color: white;">
-          📸 Analyze Chart or Image
-        </button>
-        <div id="chartAnalysisResults" style="margin-top:12px; max-height:450px; overflow:auto; display:none; border-radius:8px;"></div>
-      </div>
-      
-      <!-- JSON View Section -->
-      <div class="section-card">
-        <h3 class="section-title">
-          <span>🔍</span>
-          <span>Raw Data View</span>
-        </h3>
-        <button id="viewJSONBtn" class="sidebar-button" style="background: #34495e; color: white;">
-          { } View JSON Format
-        </button>
-        <textarea id="jsonView" style="width:100%; height:150px; display:none; font-family:'Courier New', monospace; font-size:11px; margin-top:8px; padding:12px; border:2px solid #e0e0e0; border-radius:8px; background:#f8f9fa; resize: vertical;"></textarea>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
+          <button id="downloadCSVBtn" class="sidebar-button" style="background: #000000; color: white; font-size: 14px; padding: 12px;">
+            📄 CSV
+          </button>
+          
+        </div>
+        <textarea id="jsonView" style="width: 100%; height: 160px; display: none; font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace; font-size: 12px; margin-top: 16px; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; background: #f8fafc; resize: vertical; line-height: 1.4;"></textarea>
       </div>
     </div>
   `;
@@ -316,18 +287,18 @@ Examples:
     top: 0;
     width: 4px;
     height: 100%;
-    background: rgba(255,255,255,0.3);
+    background: rgba(34, 197, 94, 0.3);
     cursor: ew-resize;
     z-index: 100000;
     transition: background 0.2s ease;
   `;
   
   resizeHandle.addEventListener('mouseenter', () => {
-    resizeHandle.style.background = 'rgba(255,255,255,0.6)';
+    resizeHandle.style.background = 'rgba(34, 197, 94, 0.6)';
   });
   
   resizeHandle.addEventListener('mouseleave', () => {
-    if (!isResizing) resizeHandle.style.background = 'rgba(255,255,255,0.3)';
+    if (!isResizing) resizeHandle.style.background = 'rgba(34, 197, 94, 0.3)';
   });
   
   resizeHandle.addEventListener('mousedown', startResize);
@@ -338,12 +309,12 @@ Examples:
   // Event listeners
   document.getElementById("selectTableBtn").addEventListener("click", enableRectangleSelection);
   document.getElementById("previewTableBtn").addEventListener("click", showPreview);
-  document.getElementById("generateMetadataBtn").addEventListener("click", generateMetadata);
+
   document.getElementById("loadToSQLBtn").addEventListener("click", loadTableToSQL);
   document.getElementById("executeNLQueryBtn").addEventListener("click", executeNaturalLanguageQuery);
   document.getElementById("generateChartBtn").addEventListener("click", generateChartFromResults);
   document.getElementById("downloadCSVBtn").addEventListener("click", downloadCSV);
-  document.getElementById("downloadMetadataBtn").addEventListener("click", downloadMetadataJSON);
+
   document.getElementById("viewJSONBtn").addEventListener("click", toggleJSONView);
   document.getElementById("selectChartBtn").addEventListener("click", startChartSelection);
   document.getElementById("closeSidebarBtn").addEventListener("click", closeSidebar);
@@ -466,7 +437,7 @@ function showPreview() {
     th.innerText = h;
     th.style.border = "1px solid #e0e0e0";
     th.style.padding = "8px";
-    th.style.background = "#667eea";
+    th.style.background = "rgba(34, 197, 94, 0.8)";
     th.style.color = "white";
     th.style.fontWeight = "600";
     trHead.appendChild(th);
@@ -507,99 +478,24 @@ function downloadCSV() {
   URL.revokeObjectURL(url);
 }
 
-// --- Download Metadata JSON ---
-function downloadMetadataJSON() {
-  if (!latestMetadata) return alert("No metadata available. Generate it first.");
-  
-  const blob = new Blob([JSON.stringify(latestMetadata, null, 2)], { type: "application/json" });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = "metadata.json";
-  a.click();
-  URL.revokeObjectURL(url);
-}
+
 
 // --- Toggle JSON View ---
 function toggleJSONView() {
   if (!latestTable && !latestMetadata) return alert("No data available.");
   const jsonView = document.getElementById("jsonView");
-  if (jsonView.style.display === "none") {
+  const btn = document.getElementById("viewJSONBtn");
+  if (jsonView.style.display === "none" || !jsonView.style.display) {
     jsonView.value = JSON.stringify(latestMetadata || latestTable, null, 2);
     jsonView.style.display = "block";
+    btn.innerText = "✕ Hide JSON";
   } else {
     jsonView.style.display = "none";
+    btn.innerText = "{ } JSON";
   }
 }
 
-// --- Generate AI Metadata ---
-async function generateMetadata() {
-  if (!latestTable) return alert("No table selected.");
-  if (isGeneratingMetadata) return alert("Metadata generation already in progress...");
 
-  isGeneratingMetadata = true;
-  const btn = document.getElementById("generateMetadataBtn");
-  const originalText = btn.innerText;
-  btn.innerText = "⏳ Generating...";
-  btn.disabled = true;
-
-  try {
-    initializeAI();
-    const metadata = await aiGenerator.generateTableMetadata(
-      latestTable.headers,
-      latestTable.data
-    );
-
-    latestMetadata = metadata;
-    displayMetadata(metadata);
-    document.getElementById("jsonView").value = JSON.stringify(metadata, null, 2);
-    alert("✅ Metadata generated successfully!");
-
-  } catch (error) {
-    console.error("Error generating metadata:", error);
-    alert("❌ Error generating metadata. Please check console.");
-  } finally {
-    btn.innerText = originalText;
-    btn.disabled = false;
-    isGeneratingMetadata = false;
-  }
-}
-
-// --- Display Metadata ---
-function displayMetadata(metadata) {
-  const container = document.getElementById("metadataView");
-  container.style.display = "block";
-  container.innerHTML = "";
-
-  const descDiv = document.createElement("div");
-  descDiv.style.marginBottom = "10px";
-  descDiv.style.padding = "12px";
-  descDiv.style.background = "linear-gradient(135deg, #667eea15 0%, #764ba215 100%)";
-  descDiv.style.borderRadius = "8px";
-  descDiv.style.borderLeft = "4px solid #667eea";
-  descDiv.innerHTML = `<strong style="color: #667eea;">📋 Table Description:</strong><br><span style="color: #333; font-size: 12px; line-height: 1.6;">${metadata.table_description}</span>`;
-  container.appendChild(descDiv);
-
-  const colsDiv = document.createElement("div");
-  colsDiv.innerHTML = `<strong style="color: #667eea; font-size: 14px;">📊 Columns (${metadata.column_count}):</strong><hr style="margin:8px 0; border: none; border-top: 2px solid #e0e0e0;">`;
-
-  metadata.columns.forEach(col => {
-    const colCard = document.createElement("div");
-    colCard.style.marginBottom = "10px";
-    colCard.style.padding = "10px";
-    colCard.style.border = "1px solid #e0e0e0";
-    colCard.style.borderRadius = "8px";
-    colCard.style.background = "#f8f9fa";
-    colCard.innerHTML = `
-      <strong style="color: #667eea;">${col.column_name}</strong> <span style="color:#888; font-size: 11px;">(${col.data_type})</span><br>
-      <small style="color: #555; line-height: 1.5;">${col.description}</small><br>
-      <em style="color:#999; font-size:10px;">💡 Samples: ${col.sample_values.join(", ")}</em>
-    `;
-    colsDiv.appendChild(colCard);
-  });
-
-  container.appendChild(colsDiv);
-}
 
 // --- Load Table to SQL ---
 async function loadTableToSQL() {
@@ -617,7 +513,7 @@ async function loadTableToSQL() {
     }
     
     if (!latestMetadata) {
-      btn.innerText = "⏳ Generating metadata...";
+      btn.innerText = "⏳ Analyzing data...";
       console.log("Auto-generating metadata for better SQL queries...");
       
       initializeAI();
@@ -626,7 +522,6 @@ async function loadTableToSQL() {
         latestTable.data
       );
       
-      displayMetadata(latestMetadata);
       document.getElementById("jsonView").value = JSON.stringify(latestMetadata, null, 2);
       
       console.log("✅ Metadata auto-generated");
@@ -645,14 +540,14 @@ async function loadTableToSQL() {
     document.getElementById("executeNLQueryBtn").style.display = "block";
     
     btn.innerText = "✅ Loaded Successfully";
-    btn.style.background = "linear-gradient(135deg, #11998e 0%, #38ef7d 100%)";
-    alert(`✅ Table loaded to SQL database with AI metadata!\n\n${latestTable.data.length} rows loaded.\n\nEnhanced with:\n• Column descriptions\n• Sample values\n• Data type context\n\nAsk questions now!`);
+    btn.style.background = "rgba(34, 197, 94, 0.8)";
+    alert(`✅ Data ready for queries!\n\n${latestTable.data.length} rows loaded with AI analysis.\n\nYou can now ask questions about your data.`);
     
   } catch (error) {
     console.error("Error loading table to SQL:", error);
     alert("❌ Error loading table. Check console for details.");
     btn.innerText = "💾 Load to SQL Database";
-    btn.style.background = "linear-gradient(135deg, #2193b0 0%, #6dd5ed 100%)";
+    btn.style.background = "rgba(34, 197, 94, 0.8)";
     btn.disabled = false;
   }
 }
@@ -687,7 +582,7 @@ async function executeNaturalLanguageQuery() {
       const analysisDiv = document.createElement("div");
       analysisDiv.style.marginBottom = "15px";
       analysisDiv.style.padding = "12px";
-      analysisDiv.style.background = "linear-gradient(135deg, #667eea 0%, #764ba2 100%)";
+      analysisDiv.style.background = "rgba(34, 197, 94, 0.8)";
       analysisDiv.style.borderRadius = "8px";
       analysisDiv.style.color = "white";
       analysisDiv.style.boxShadow = "0 4px 6px rgba(0,0,0,0.1)";
@@ -723,18 +618,18 @@ async function executeNaturalLanguageQuery() {
     sqlInfoDiv.style.fontSize = "11px";
     sqlInfoDiv.style.borderLeft = "3px solid #667eea";
     
-    sqlInfoDiv.innerHTML = `
-      <details>
-        <summary style="cursor:pointer; font-weight:bold; color:#667eea;">
-          🔍 Query Details (click to expand)
-        </summary>
-        <div style="margin-top:8px;">
-          <strong>Question:</strong> ${question}<br>
-          <strong>SQL:</strong> ode style="background:#fff; padding:4px 8px; display:block; margin-top:4px; border-radius:4px;x; font-family: monospace;">${sql}</code>
-          ${explanation ? `<strong>Explanation:</strong> ${explanation}` : ''}
-        </div>
-      </details>
-    `;
+    // sqlInfoDiv.innerHTML = `
+    //   <details>
+    //     <summary style="cursor:pointer; font-weight:bold; color:#667eea;">
+    //       🔍 Query Details (click to expand)
+    //     </summary>
+    //     <div style="margin-top:8px;">
+    //       <strong>Question:</strong> ${question}<br>
+    //       <strong>SQL:</strong> ode style="background:#fff; padding:4px 8px; display:block; margin-top:4px; border-radius:4px;x; font-family: monospace;">${sql}</code>
+    //       ${explanation ? `<strong>Explanation:</strong> ${explanation}` : ''}
+    //     </div>
+    //   </details>
+    // `;
     
     resultsDiv.appendChild(sqlInfoDiv);
     
@@ -754,7 +649,7 @@ async function executeNaturalLanguageQuery() {
       
       const tableToggle = document.createElement("details");
       tableToggle.innerHTML = `
-        <summary style="cursor:pointer; padding:8px; background:linear-gradient(135deg, #11998e15 0%, #38ef7d15 100%); border-radius:8px; font-weight:bold; color:#11998e; margin-bottom:10px;">
+        <summary style="cursor:pointer; padding:8px; background:rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border-radius:8px; font-weight:bold; color:#000000; margin-bottom:10px;">
           📊 View Raw Data (${results.values.length} rows)
         </summary>
       `;
@@ -772,7 +667,7 @@ async function executeNaturalLanguageQuery() {
         th.innerText = col;
         th.style.border = "1px solid #e0e0e0";
         th.style.padding = "8px";
-        th.style.background = "#667eea";
+        th.style.background = "rgba(34, 197, 94, 0.8)";
         th.style.color = "white";
         th.style.fontWeight = "600";
         trHead.appendChild(th);
@@ -1179,69 +1074,170 @@ async function base64ToFile(base64Data, filename) {
 }
 
 function displayChartAnalysisResults(container, analysis, imageData) {
+  const analysisId = 'analysis_' + Date.now();
+  
   container.innerHTML = `
-    <div style="background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.15);">
-      <!-- Image Preview - FIXED -->
-      <div style="position: relative; background: #f8f9fa; padding: 16px; text-align: center; border-bottom: 3px solid #667eea;">
-        <img src="${imageData}" style="max-width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: block; margin: 0 auto;" alt="Chart Screenshot">
-        <div style="position: absolute; top: 24px; right: 24px; background: rgba(102, 126, 234, 0.9); color: white; padding: 6px 12px; border-radius: 20px; font-size: 11px; font-weight: 600; backdrop-filter: blur(10px);">
-          AI ANALYZED
+    <div style="background: #ffffff; border-radius: 16px; overflow: hidden; box-shadow: 0 8px 32px rgba(0,0,0,0.12); border: 1px solid #e5e7eb; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+      
+      <!-- Header Section -->
+      <div style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); padding: 24px; color: #000000; border-bottom: 3px solid rgba(34, 197, 94, 0.8);">
+        <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div style="display: flex; align-items: center; gap: 12px;">
+            <div style="background: rgba(255,255,255,0.2); padding: 8px; border-radius: 12px; backdrop-filter: blur(10px);">
+              <span style="font-size: 24px; display: block;">📊</span>
+            </div>
+            <div>
+              <h2 style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.025em;">Chart Analysis Results</h2>
+              <p style="margin: 4px 0 0 0; font-size: 14px; opacity: 0.9;">AI-powered insights and data visualization analysis</p>
+            </div>
+          </div>
+          <div style="background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; backdrop-filter: blur(10px);">
+            ✨ AI ANALYZED
+          </div>
         </div>
       </div>
-      
-      <!-- Analysis Content -->
-      <div style="padding: 20px;">
-        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 16px;">
-          <span style="font-size: 24px;">📊</span>
-          <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #667eea;">Chart Insights</h3>
+
+      <!-- Image Preview Section -->
+      <div style="background: #f8fafc; padding: 24px; border-bottom: 1px solid #e5e7eb;">
+        <div style="text-align: center;">
+          <img src="${imageData}" 
+               style="max-width: 100%; max-height: 400px; height: auto; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid #e5e7eb;" 
+               alt="Analyzed chart visualization">
+        </div>
+      </div>
+
+      <!-- Combined Analysis Section -->
+      <div style="padding: 32px;">
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
+          <div style="background: rgba(34, 197, 94, 0.8); backdrop-filter: blur(10px); padding: 8px; border-radius: 10px;">
+            <span style="font-size: 18px; color: white; display: block;">🔍</span>
+          </div>
+          <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #1f2937;">Chart Insights</h3>
         </div>
         
-        ${analysis.chartDescription ? `
-        <div style="background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%); padding: 16px; border-radius: 10px; margin-bottom: 14px; border-left: 4px solid #667eea;">
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 8px;">
-            <span style="font-size: 16px;">📝</span>
-            <strong style="font-size: 14px; color: #667eea;">Summary</strong>
-          </div>
-          <p style="margin: 0; font-size: 13px; line-height: 1.6; color: #333;">${analysis.chartDescription}</p>
+        <div style="background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(10px); padding: 24px; border-radius: 12px; margin-bottom: 24px; border: 1px solid rgba(0, 0, 0, 0.1);">
+          ${analysis.chartDescription ? `
+            <div style="margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <span style="font-size: 16px;">📝</span>
+                <strong style="font-size: 15px; color: #000000; font-weight: 600;">Summary</strong>
+              </div>
+              <p style="margin: 0; font-size: 14px; line-height: 1.7; color: #374151;">${analysis.chartDescription}</p>
+            </div>
+          ` : ''}
+          
+          ${analysis.analysis && analysis.analysis.length > 0 ? `
+            <div style="margin-bottom: 20px;">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <span style="font-size: 16px;">🔍</span>
+                <strong style="font-size: 15px; color: #000000; font-weight: 600;">Detailed Analysis</strong>
+              </div>
+              <ul style="margin: 0; padding: 0; list-style: none;">
+                ${analysis.analysis.map((item, idx) => `
+                  <li style="margin-bottom: 12px; font-size: 14px; line-height: 1.7; color: #374151; display: flex; gap: 12px;">
+                    <span style="background: rgba(34, 197, 94, 0.8); backdrop-filter: blur(5px); color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; margin-top: 2px;">${idx + 1}</span>
+                    <span>${item}</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          ` : ''}
+          
+          ${analysis.keyFindings && analysis.keyFindings.length > 0 ? `
+            <div>
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+                <span style="font-size: 16px;">💡</span>
+                <strong style="font-size: 15px; color: #000000; font-weight: 600;">Key Findings</strong>
+              </div>
+              <ul style="margin: 0; padding: 0; list-style: none;">
+                ${analysis.keyFindings.map((finding, idx) => `
+                  <li style="margin-bottom: 12px; font-size: 14px; line-height: 1.7; color: #374151; display: flex; gap: 12px;">
+                    <span style="background: rgba(34, 197, 94, 0.8); backdrop-filter: blur(5px); color: white; width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; margin-top: 2px;">!</span>
+                    <span>${finding}</span>
+                  </li>
+                `).join('')}
+              </ul>
+            </div>
+          ` : ''}
         </div>
-        ` : ''}
-        
-        ${analysis.analysis && analysis.analysis.length > 0 ? `
-        <div style="background: linear-gradient(135deg, #11998e15 0%, #38ef7d15 100%); padding: 16px; border-radius: 10px; margin-bottom: 14px; border-left: 4px solid #11998e;">
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-            <span style="font-size: 16px;">🔍</span>
-            <strong style="font-size: 14px; color: #11998e;">Analysis</strong>
-          </div>
-          <ul style="margin: 0; padding-left: 20px; list-style: none;">
-            ${analysis.analysis.map((item, idx) => `
-              <li style="margin-bottom: 10px; font-size: 13px; line-height: 1.6; color: #333; position: relative;">
-                <span style="position: absolute; left: -20px; color: #11998e; font-weight: 600;">${idx + 1}.</span>
-                ${item}
-              </li>
-            `).join('')}
-          </ul>
-        </div>
-        ` : ''}
-        
-        ${analysis.keyFindings && analysis.keyFindings.length > 0 ? `
-        <div style="background: linear-gradient(135deg, #f093fb15 0%, #f5576c15 100%); padding: 16px; border-radius: 10px; border-left: 4px solid #f093fb;">
-          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
-            <span style="font-size: 16px;">💡</span>
-            <strong style="font-size: 14px; color: #f093fb;">Key Findings</strong>
-          </div>
-          <ul style="margin: 0; padding-left: 20px; list-style: none;">
-            ${analysis.keyFindings.map((finding, idx) => `
-              <li style="margin-bottom: 10px; font-size: 13px; line-height: 1.6; color: #333; position: relative;">
-                <span style="position: absolute; left: -20px; color: #f093fb; font-weight: 600;">${idx + 1}.</span>
-                ${finding}
-              </li>
-            `).join('')}
-          </ul>
-        </div>
-        ` : ''}
       </div>
     </div>
   `;
+  
+  // Store analysis data for export
+  window.chartAnalysisData = window.chartAnalysisData || {};
+  window.chartAnalysisData[analysisId] = {
+    analysis,
+    imageData,
+    timestamp: new Date().toISOString()
+  };
+}
+
+function exportAnalysis(analysisId, format) {
+  const data = window.chartAnalysisData?.[analysisId];
+  if (!data) {
+    alert('Analysis data not found');
+    return;
+  }
+  
+  const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+  const filename = `chart-analysis-${timestamp}`;
+  
+  if (format === 'csv') {
+    exportAsCSV(data, filename);
+  } else if (format === 'json') {
+    exportAsJSON(data, filename);
+  }
+}
+
+function exportAsCSV(data, filename) {
+  const { analysis } = data;
+  let csvContent = 'Section,Item,Content\n';
+  
+  if (analysis.chartDescription) {
+    csvContent += `"Summary","Description","${analysis.chartDescription.replace(/"/g, '""')}"\n`;
+  }
+  
+  if (analysis.analysis) {
+    analysis.analysis.forEach((item, idx) => {
+      csvContent += `"Analysis","Point ${idx + 1}","${item.replace(/"/g, '""')}"\n`;
+    });
+  }
+  
+  if (analysis.keyFindings) {
+    analysis.keyFindings.forEach((finding, idx) => {
+      csvContent += `"Key Findings","Finding ${idx + 1}","${finding.replace(/"/g, '""')}"\n`;
+    });
+  }
+  
+  downloadFile(csvContent, `${filename}.csv`, 'text/csv');
+}
+
+function exportAsJSON(data, filename) {
+  const exportData = {
+    timestamp: data.timestamp,
+    analysis: data.analysis,
+    metadata: {
+      exportedAt: new Date().toISOString(),
+      format: 'json',
+      version: '1.0'
+    }
+  };
+  
+  const jsonContent = JSON.stringify(exportData, null, 2);
+  downloadFile(jsonContent, `${filename}.json`, 'application/json');
+}
+
+function downloadFile(content, filename, mimeType) {
+  const blob = new Blob([content], { type: mimeType });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = filename;
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
 }
 
 function closeSidebar() {
