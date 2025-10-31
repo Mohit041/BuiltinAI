@@ -165,41 +165,6 @@ smart-table-extractor/
    - Rectangle selection tool for tables and charts
    - Vision analysis orchestration
 
-### Architecture Diagram
-
-```
-┌─────────────────────────────────────────────────────┐
-│         Chrome Extension (Manifest V3)              │
-├─────────────────────────────────────────────────────┤
-│                                                      │
-│  ┌────────────────────────────────────────────┐    │
-│  │      Background Service Worker             │    │
-│  │  - Extension lifecycle management          │    │
-│  │  - Icon click handler                      │    │
-│  └────────────────────────────────────────────┘    │
-│                      ↓                              │
-│  ┌────────────────────────────────────────────┐    │
-│  │      Content Script (Main UI)              │    │
-│  │  - Modern sidebar with gradient UI         │    │
-│  │  - Table/chart selection                   │    │
-│  │  - Orchestration logic                     │    │
-│  └────────────────────────────────────────────┘    │
-│    ↓              ↓             ↓           ↓       │
-│    │             │             │           │       │
-│ ┌──┴──┐      ┌───┴────┐   ┌───┴────┐  ┌──┴───┐   │
-│ │ AI  │      │  SQL   │   │ Chart  │  │Vision│   │
-│ │Meta │      │ Query  │   │Generate│  │API   │   │
-│ │Gen. │      │Manager │   │        │  │      │   │
-│ └─────┘      └────────┘   └────────┘  └──────┘   │
-│    ↓              ↓             ↓           ↓       │
-└────┼──────────────┼─────────────┼───────────┼─────┘
-     │              │             │           │
-     ↓              ↓             ↓           ↓
-┌─────────┐  ┌──────────┐  ┌─────────┐  ┌──────────┐
-│ Prompt  │  │  SQL.js  │  │Chart.js │  │Multimodal│
-│   API   │  │          │  │         │  │ Prompt   │
-└─────────┘  └──────────┘  └─────────┘  └──────────┘
-```
 
 
 ## License
