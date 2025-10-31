@@ -178,7 +178,7 @@ function createSidebar() {
   document.head.appendChild(style);
 
   sidebar.innerHTML = `
-    <div style="background: rgba(255, 255, 255, 0.1); padding: 20px; backdrop-filter: blur(15px); position: relative;">
+    <div style="background: linear-gradient(135deg, rgba(240, 248, 240, 0.4), rgba(248, 250, 248, 0.4), rgba(245, 250, 245, 0.4)); padding: 20px; backdrop-filter: blur(15px); position: relative; border-bottom: 2px solid rgba(200, 230, 200, 0.3);">
       <button id="closeSidebarBtn" style="
         position: absolute;
         top: 8px;
@@ -196,13 +196,13 @@ function createSidebar() {
         justify-content: center;
         transition: background 0.2s;
       " onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
-        ✕
+        ×
       </button>
-      <h2 style="margin: 0; color: #000000; font-size: 24px; font-weight: 700;">
-         Smart Table Extractor
+      <h2 style="margin: 0; color: #000000; font-size: 24px; font-weight: 700; text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);">
+        📊 DataGlance
       </h2>
-      <p style="margin: 8px 0 0 0; color: rgba(0, 0, 0, 0.7); font-size: 13px;">
-        AI-powered data extraction & analysis
+      <p style="margin: 8px 0 0 0; color: rgba(0, 0, 0, 0.8); font-size: 13px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);">
+        Extract tables and analyze charts with AI-powered insights
       </p>
     </div>
     
@@ -210,24 +210,24 @@ function createSidebar() {
       <!-- Data Extraction & Analysis -->
       <div class="section-card">
         <h3 class="section-title">
-          <span>📊</span>
+          <span>📋</span>
           <span>Data Extraction & Analysis</span>
         </h3>
         <div style="display: grid; gap: 12px;">
-          <button id="selectTableBtn" class="sidebar-button" style="background: #000000; color: white; font-size: 15px; padding: 14px;">
-            📋 Select Table Region
+          <button id="selectTableBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(245, 250, 245, 0.9), rgba(240, 248, 240, 0.9)); color: #000000; font-size: 15px; padding: 14px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
+            🎯 Select Table Region
           </button>
-          <button id="previewTableBtn" class="sidebar-button" style="background: #ffffff; color: #000000; border: 2px solid rgba(0, 0, 0, 0.2); font-size: 15px; padding: 14px;">
+          <button id="previewTableBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(248, 250, 248, 0.9), rgba(245, 250, 245, 0.9)); color: #000000; border: 2px solid rgba(200, 230, 200, 0.3); font-size: 15px; padding: 14px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
             👁️ Preview Selected Data
           </button>
-          <button id="loadToSQLBtn" class="sidebar-button" style="background: #000000; color: white; font-size: 15px; padding: 14px;">
+          <button id="loadToSQLBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(240, 248, 240, 0.9), rgba(245, 250, 245, 0.9)); color: #000000; font-size: 15px; padding: 14px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
             🚀 Prepare for Queries
           </button>
         </div>
         
         <div id="tablePreview" style="margin-top: 16px; max-height: 320px; overflow: auto; display: none; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; background: #ffffff;"></div>
         
-        <textarea id="nlQueryInput" placeholder="💭 Ask questions about your data...
+        <textarea id="nlQueryInput" placeholder="◦ Ask questions about your data...
 
 Examples:
 • Show top 10 rows
@@ -235,14 +235,14 @@ Examples:
 • Count unique values in Y
 • Filter where Z > 100" style="width: 100%; height: 100px; margin-top: 16px; display: none; padding: 16px; font-size: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; resize: vertical; line-height: 1.5;"></textarea>
         
-        <button id="executeNLQueryBtn" class="sidebar-button" style="background: #000000; color: white; display: none; margin-top: 12px; font-size: 15px; padding: 14px;">
+        <button id="executeNLQueryBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(245, 250, 245, 0.9), rgba(240, 248, 240, 0.9)); color: #000000; display: none; margin-top: 12px; font-size: 15px; padding: 14px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
           🔍 Execute Query
         </button>
         
         <div id="queryResults" style="margin-top: 16px; max-height: 400px; overflow: auto; display: none; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; background: #ffffff; font-size: 13px;"></div>
         
         <div id="chartControls" style="margin-top: 16px; display: none;">
-          <button id="generateChartBtn" class="sidebar-button" style="background: #000000; color: white; font-size: 15px; padding: 14px;">
+          <button id="generateChartBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(248, 250, 248, 0.9), rgba(245, 250, 245, 0.9)); color: #000000; font-size: 15px; padding: 14px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
             📊 Create Visualization
           </button>
         </div>
@@ -256,7 +256,7 @@ Examples:
           <span>🔍</span>
           <span>Chart Insights</span>
         </h3>
-        <button id="selectChartBtn" class="sidebar-button" style="background: #000000; color: white; font-size: 15px; padding: 14px;">
+        <button id="selectChartBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(240, 248, 240, 0.9), rgba(245, 250, 245, 0.9)); color: #000000; font-size: 15px; padding: 14px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
           📸 Analyze Chart or Image
         </button>
         <div id="chartAnalysisResults" style="margin-top: 16px; max-height: 450px; overflow: auto; display: none; border-radius: 12px;"></div>
@@ -268,11 +268,10 @@ Examples:
           <span>📥</span>
           <span>Export Data</span>
         </h3>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 12px;">
-          <button id="downloadCSVBtn" class="sidebar-button" style="background: #000000; color: white; font-size: 14px; padding: 12px;">
+        <div style="display: flex; justify-content: center;">
+          <button id="downloadCSVBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(245, 250, 245, 0.9), rgba(240, 248, 240, 0.9)); color: #000000; font-size: 14px; padding: 12px; width: 120px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
             📄 CSV
           </button>
-          
         </div>
         <textarea id="jsonView" style="width: 100%; height: 160px; display: none; font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace; font-size: 12px; margin-top: 16px; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; background: #f8fafc; resize: vertical; line-height: 1.4;"></textarea>
       </div>
@@ -315,7 +314,6 @@ Examples:
   document.getElementById("generateChartBtn").addEventListener("click", generateChartFromResults);
   document.getElementById("downloadCSVBtn").addEventListener("click", downloadCSV);
 
-  document.getElementById("viewJSONBtn").addEventListener("click", toggleJSONView);
   document.getElementById("selectChartBtn").addEventListener("click", startChartSelection);
   document.getElementById("closeSidebarBtn").addEventListener("click", closeSidebar);
 }
@@ -399,9 +397,9 @@ function enableRectangleSelection() {
 
     if (tables.length > 0) {
       latestTable = parseTableElement(tables[0]);
-      alert(`✅ Table selected! ${latestTable.data.length} rows, ${latestTable.headers.length} columns.`);
+      alert(`✓ Table selected! ${latestTable.data.length} rows, ${latestTable.headers.length} columns.`);
     } else {
-      alert("⚠️ No table detected in selection.");
+      alert("⚠ No table detected in selection.");
     }
 
     cleanup();
@@ -503,7 +501,7 @@ async function loadTableToSQL() {
   
   const btn = document.getElementById("loadToSQLBtn");
   btn.disabled = true;
-  btn.innerText = "⏳ Loading...";
+  btn.innerText = "◐ Loading...";
   
   try {
     if (sqlManager) {
@@ -513,7 +511,7 @@ async function loadTableToSQL() {
     }
     
     if (!latestMetadata) {
-      btn.innerText = "⏳ Analyzing data...";
+      btn.innerText = "◐ Analyzing data...";
       console.log("Auto-generating metadata for better SQL queries...");
       
       initializeAI();
@@ -524,10 +522,10 @@ async function loadTableToSQL() {
       
       document.getElementById("jsonView").value = JSON.stringify(latestMetadata, null, 2);
       
-      console.log("✅ Metadata auto-generated");
+      console.log("✓ Metadata auto-generated");
     }
     
-    btn.innerText = "⏳ Loading to SQL...";
+    btn.innerText = "◐ Loading to SQL...";
     sqlManager = new SQLQueryManager();
     await sqlManager.initialize();
     await sqlManager.createTableFromJSON(
@@ -539,14 +537,14 @@ async function loadTableToSQL() {
     document.getElementById("nlQueryInput").style.display = "block";
     document.getElementById("executeNLQueryBtn").style.display = "block";
     
-    btn.innerText = "✅ Loaded Successfully";
+    btn.innerText = "✓ Loaded Successfully";
     btn.style.background = "rgba(34, 197, 94, 0.8)";
-    alert(`✅ Data ready for queries!\n\n${latestTable.data.length} rows loaded with AI analysis.\n\nYou can now ask questions about your data.`);
+    alert(`✓ Data ready for queries!\n\n${latestTable.data.length} rows loaded with AI analysis.\n\nYou can now ask questions about your data.`);
     
   } catch (error) {
     console.error("Error loading table to SQL:", error);
-    alert("❌ Error loading table. Check console for details.");
-    btn.innerText = "💾 Load to SQL Database";
+    alert("✗ Error loading table. Check console for details.");
+    btn.innerText = "▶ Load to SQL Database";
     btn.style.background = "rgba(34, 197, 94, 0.8)";
     btn.disabled = false;
   }
@@ -563,9 +561,9 @@ async function executeNaturalLanguageQuery() {
   const resultsDiv = document.getElementById("queryResults");
   
   btn.disabled = true;
-  btn.innerText = "⏳ Querying...";
+  btn.innerText = "◐ Querying...";
   resultsDiv.style.display = "block";
-  resultsDiv.innerHTML = "<p style='padding:10px;'>🤖 Processing your question and generating insights...</p>";
+  resultsDiv.innerHTML = "<p style='padding:10px;'>◈ Processing your question and generating insights...</p>";
   
   document.getElementById("chartControls").style.display = "none";
   document.getElementById("chartContainer").style.display = "none";
@@ -589,7 +587,7 @@ async function executeNaturalLanguageQuery() {
       
       analysisDiv.innerHTML = `
         <div style="margin-bottom:12px;">
-          <strong style="font-size:14px;">💡 AI Analysis</strong>
+          <strong style="font-size:14px;">◉ AI Analysis</strong>
         </div>
         
         <div style="background:rgba(255,255,255,0.15); padding:12px; border-radius:6px; margin-bottom:10px;">
@@ -650,7 +648,7 @@ async function executeNaturalLanguageQuery() {
       const tableToggle = document.createElement("details");
       tableToggle.innerHTML = `
         <summary style="cursor:pointer; padding:8px; background:rgba(255, 255, 255, 0.8); backdrop-filter: blur(10px); border-radius:8px; font-weight:bold; color:#000000; margin-bottom:10px;">
-          📊 View Raw Data (${results.values.length} rows)
+          ▦ View Raw Data (${results.values.length} rows)
         </summary>
       `;
       
@@ -702,17 +700,17 @@ async function executeNaturalLanguageQuery() {
   } catch (error) {
     console.error("Query error:", error);
     resultsDiv.innerHTML = `<div style="padding:12px; background:#ffebee; border-radius:8px; color:#c62828; border-left: 4px solid #f44336;">
-      <strong>❌ Error:</strong> ${error.message}
+      <strong>✗ Error:</strong> ${error.message}
     </div>`;
   } finally {
-    btn.innerText = "🔍 Execute Query";
+    btn.innerText = "▷ Execute Query";
     btn.disabled = false;
   }
 }
 
 // --- Generate Chart from Results ---
 async function generateChartFromResults() {
-  console.log("🎨 Starting chart generation...");
+  console.log("▦ Starting chart generation...");
   
   if (!latestQueryResults) {
     alert("No query results available. Execute a query first.");
@@ -726,7 +724,7 @@ async function generateChartFromResults() {
   
   const btn = document.getElementById("generateChartBtn");
   btn.disabled = true;
-  btn.innerText = "⏳ Generating...";
+  btn.innerText = "◐ Generating...";
   
   try {
     initializeChartGenerator();
@@ -743,20 +741,20 @@ async function generateChartFromResults() {
     );
     
     if (result) {
-      console.log("✅ Chart generation completed successfully");
+      console.log("✓ Chart generation completed successfully");
     }
     
   } catch (error) {
-    console.error("❌ Chart generation error:", error);
+    console.error("✗ Chart generation error:", error);
     const chartContainer = document.getElementById("chartContainer");
     chartContainer.innerHTML = `
       <div style="padding:15px; color:#c62828; border:2px solid #ffcdd2; background:#ffebee; border-radius:8px;">
-        <strong>❌ Chart Generation Failed</strong><br>
+        <strong>✗ Chart Generation Failed</strong><br>
         ${error.message}
       </div>
     `;
   } finally {
-    btn.innerText = "📊 Visualize with AI Chart";
+    btn.innerText = "▦ Visualize with AI Chart";
     btn.disabled = false;
   }
 }
@@ -806,11 +804,11 @@ async function startChartSelection() {
   const aiStatus = await checkAIAvailability();
   
   if (!aiStatus.available) {
-    alert(`⚠️ AI Vision Not Available\n\n${aiStatus.message}\n\nSetup Instructions:\n1. Go to chrome://flags/#prompt-api-for-gemini-nano\n2. Set to "Enabled"\n3. Go to chrome://flags/#optimization-guide-on-device-model\n4. Set to "Enabled BypassPerfRequirement"\n5. Restart Chrome\n6. Check chrome://components/ for model download`);
+    alert(`⚠ AI Vision Not Available\n\n${aiStatus.message}\n\nSetup Instructions:\n1. Go to chrome://flags/#prompt-api-for-gemini-nano\n2. Set to "Enabled"\n3. Go to chrome://flags/#optimization-guide-on-device-model\n4. Set to "Enabled BypassPerfRequirement"\n5. Restart Chrome\n6. Check chrome://components/ for model download`);
     return;
   }
   
-  alert("📸 Chart Analysis Mode\n\nDraw a rectangle around the chart or image you want to analyze.\n\nPress ESC to cancel.");
+  alert("◎ Chart Analysis Mode\n\nDraw a rectangle around the chart or image you want to analyze.\n\nPress ESC to cancel.");
   
   chartSelectionActive = true;
   
@@ -904,18 +902,18 @@ function cleanupChartSelection() {
 async function captureAndAnalyzeSelectedArea(rect) {
   const resultsDiv = document.getElementById("chartAnalysisResults");
   resultsDiv.style.display = "block";
-  resultsDiv.innerHTML = "<p style='padding:10px;'>📸 Capturing selected area...</p>";
+  resultsDiv.innerHTML = "<p style='padding:10px;'>◎ Capturing selected area...</p>";
   
   try {
     const imageData = await captureRectangleAsImage(rect);
-    resultsDiv.innerHTML = "<p style='padding:10px;'>🤖 Analyzing with AI Vision...</p>";
+    resultsDiv.innerHTML = "<p style='padding:10px;'>◈ Analyzing with AI Vision...</p>";
     const analysis = await analyzeChartWithVisionAPI(imageData);
     displayChartAnalysisResults(resultsDiv, analysis, imageData);
   } catch (error) {
     console.error("Chart analysis error:", error);
     resultsDiv.innerHTML = `
       <div style="padding:12px; background:#ffebee; border-radius:8px; color:#c62828; border-left: 4px solid #f44336;">
-        <strong>❌ Error:</strong> ${error.message}
+        <strong>✗ Error:</strong> ${error.message}
       </div>
     `;
   }
@@ -923,7 +921,7 @@ async function captureAndAnalyzeSelectedArea(rect) {
 
 async function captureRectangleAsImage(rect) {
   try {
-    console.log("📸 Capturing rectangle area:", rect);
+    console.log("◎ Capturing rectangle area:", rect);
     
     if (typeof html2canvas !== 'undefined') {
       console.log("Using html2canvas for capture");
@@ -943,7 +941,7 @@ async function captureRectangleAsImage(rect) {
       });
       
       const imageData = canvas.toDataURL('image/png');
-      console.log("✅ Screenshot captured");
+      console.log("✓ Screenshot captured");
       return imageData;
     }
     
@@ -965,7 +963,7 @@ async function captureRectangleAsImage(rect) {
 
 async function analyzeChartWithVisionAPI(imageData) {
   try {
-    console.log("🔍 Creating multimodal AI session...");
+    console.log("◈ Creating multimodal AI session...");
     
     if (typeof LanguageModel === 'undefined') {
       throw new Error("LanguageModel API not available");
@@ -982,10 +980,10 @@ async function analyzeChartWithVisionAPI(imageData) {
       language: 'en'
     });
     
-    console.log("✅ Session created successfully");
+    console.log("✓ Session created successfully");
     
     const imageFile = await base64ToFile(imageData, 'chart.png');
-    console.log("✅ Image file ready");
+    console.log("✓ Image file ready");
     
     await session.append([
       {
@@ -1022,10 +1020,10 @@ Be specific with numbers, names, and values you see in the visualization. Focus 
       }
     ]);
     
-    console.log("✅ Image appended to session");
+    console.log("✓ Image appended to session");
     
     const result = await session.prompt("Provide the analysis in the JSON format specified above.");
-    console.log("✅ Raw response:", result);
+    console.log("✓ Raw response:", result);
     
     let analysis;
     try {
@@ -1044,7 +1042,7 @@ Be specific with numbers, names, and values you see in the visualization. Focus 
       };
     }
     
-    console.log("✅ Analysis complete:", analysis);
+    console.log("✓ Analysis complete:", analysis);
     
     if (session.destroy) {
       session.destroy();
@@ -1053,7 +1051,7 @@ Be specific with numbers, names, and values you see in the visualization. Focus 
     return analysis;
     
   } catch (error) {
-    console.error("❌ Vision API error:", error);
+    console.error("✗ Vision API error:", error);
     throw new Error(`Vision API failed: ${error.message}\n\nMake sure:\n1. Flags enabled at chrome://flags\n2. Model downloaded at chrome://components/\n3. Using Chrome 139+ or Canary`);
   }
 }
@@ -1084,7 +1082,7 @@ function displayChartAnalysisResults(container, analysis, imageData) {
         <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
           <div style="display: flex; align-items: center; gap: 12px;">
             <div style="background: rgba(255,255,255,0.2); padding: 8px; border-radius: 12px; backdrop-filter: blur(10px);">
-              <span style="font-size: 24px; display: block;">📊</span>
+              <span style="font-size: 24px; display: block;">▦</span>
             </div>
             <div>
               <h2 style="margin: 0; font-size: 20px; font-weight: 700; letter-spacing: -0.025em;">Chart Analysis Results</h2>
@@ -1092,7 +1090,7 @@ function displayChartAnalysisResults(container, analysis, imageData) {
             </div>
           </div>
           <div style="background: rgba(255,255,255,0.15); padding: 8px 16px; border-radius: 20px; font-size: 12px; font-weight: 600; backdrop-filter: blur(10px);">
-            ✨ AI ANALYZED
+            ◈ AI ANALYZED
           </div>
         </div>
       </div>
@@ -1110,7 +1108,7 @@ function displayChartAnalysisResults(container, analysis, imageData) {
       <div style="padding: 32px;">
         <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 24px;">
           <div style="background: rgba(34, 197, 94, 0.8); backdrop-filter: blur(10px); padding: 8px; border-radius: 10px;">
-            <span style="font-size: 18px; color: white; display: block;">🔍</span>
+            <span style="font-size: 18px; color: white; display: block;">◈</span>
           </div>
           <h3 style="margin: 0; font-size: 18px; font-weight: 700; color: #1f2937;">Chart Insights</h3>
         </div>
@@ -1119,7 +1117,7 @@ function displayChartAnalysisResults(container, analysis, imageData) {
           ${analysis.chartDescription ? `
             <div style="margin-bottom: 20px;">
               <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                <span style="font-size: 16px;">📝</span>
+                <span style="font-size: 16px;">▤</span>
                 <strong style="font-size: 15px; color: #000000; font-weight: 600;">Summary</strong>
               </div>
               <p style="margin: 0; font-size: 14px; line-height: 1.7; color: #374151;">${analysis.chartDescription}</p>
@@ -1129,7 +1127,7 @@ function displayChartAnalysisResults(container, analysis, imageData) {
           ${analysis.analysis && analysis.analysis.length > 0 ? `
             <div style="margin-bottom: 20px;">
               <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                <span style="font-size: 16px;">🔍</span>
+                <span style="font-size: 16px;">◈</span>
                 <strong style="font-size: 15px; color: #000000; font-weight: 600;">Detailed Analysis</strong>
               </div>
               <ul style="margin: 0; padding: 0; list-style: none;">
@@ -1146,7 +1144,7 @@ function displayChartAnalysisResults(container, analysis, imageData) {
           ${analysis.keyFindings && analysis.keyFindings.length > 0 ? `
             <div>
               <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
-                <span style="font-size: 16px;">💡</span>
+                <span style="font-size: 16px;">◉</span>
                 <strong style="font-size: 15px; color: #000000; font-weight: 600;">Key Findings</strong>
               </div>
               <ul style="margin: 0; padding: 0; list-style: none;">

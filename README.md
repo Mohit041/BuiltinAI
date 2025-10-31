@@ -6,9 +6,9 @@ A powerful Chrome extension that transforms web table data extraction and analys
 ![Chrome](https://img.shields.io/badge/Chrome-139%2B-green.svg)
 ![AI](https://img.shields.io/badge/AI-Gemini%20Nano-purple.svg)
 
-##  Key Features
+## Key Features
 
-###  Core Capabilities
+### Core Capabilities
 - **Smart Table Extraction**: Select any table on a webpage with intuitive rectangle selection
 - **AI-Powered Metadata Generation**: Automatically generates intelligent descriptions and data types
 - **Natural Language Queries**: Ask questions about your data in plain English
@@ -26,22 +26,17 @@ A powerful Chrome extension that transforms web table data extraction and analys
 
 **Used in:**
 
-1. **AI Metadata Generation** 
+1. **AI Metadata Generation**
   - Purpose: Generates intelligent table descriptions, column metadata, data types, and sample values
   - File: `src/content/ai-metadata-generator.js`
 
-
 2. **Natural Language to SQL Conversion**
-
   - Purpose: Converts user questions into SQL queries with context from metadata
   - File: `src/content/sql-query.js` → `generateSQLFromQuestion()`
 
-
 3. **Query Results Analysis**
-
   - Purpose: Analyzes SQL query results and generates human-readable insights
   - File: `src/content/sql-query.js` → `analyzeResults()`
-
 
 4. **Chart Type Selection**
   - Purpose: Intelligently selects the best chart type based on data
@@ -51,8 +46,7 @@ A powerful Chrome extension that transforms web table data extraction and analys
 
 
 **Used in:**
--  **Chart Insights (Vision Analysis)**
-
+- **Chart Insights (Vision Analysis)**
   - Purpose: Analyzes screenshots of charts/graphs to extract insights, patterns, and findings
   - File: `src/content/content.js` → `analyzeChartWithVisionAPI()`
   - Input: Image File object + text prompt
@@ -114,23 +108,23 @@ smart-table-extractor/
 
 ### Step 1: Extract Table
 1. Click extension icon on any webpage with tables
-2. Click **" Select Table Region"**
+2. Click **"▢ Select Table Region"**
 3. Draw a rectangle around the table you want to extract
-4. Click **" Preview Selected Data"** to verify
+4. Click **"◉ Preview Selected Data"** to verify
 
 ### Step 2: Query with Natural Language
-1. Click **" Query Using Natural Language"**
-2. Type questions like
-3. Click **" Execute Query"**
+1. Click **"▶ Query Using Natural Language"**
+2. Type questions like your data
+3. Click **"▷ Execute Query"**
 4. View AI-generated insights and raw data
 
 ### Step 4: Visualize Data
-1. After querying, click **" Visualize Data using AI"**
+1. After querying, click **"▦ Visualize Data using AI"**
 2. AI automatically selects best chart type
 3. Interactive Chart.js visualization appears
 
 ### Step 5: Analyze Charts (Vision AI)
-1. Click **"Analyze Chart or Image"**
+1. Click **"◎ Analyze Chart or Image"**
 2. Draw rectangle around any chart/graph on the page
 3. AI vision analyzes the image and provides:
    - Summary
@@ -138,8 +132,8 @@ smart-table-extractor/
    - Key findings
 
 ### Export Options
-- **CSV**: Click " Download as CSV"
-- **Metadata JSON**: Click "Download as JSON"
+- **CSV**: Click "▤ Download as CSV"
+- **Metadata JSON**: Click "▼ Download as JSON"
 
 
 
