@@ -589,8 +589,8 @@ async function executeNaturalLanguageQuery() {
       
       analysisDiv.innerHTML = `
         <div style="margin-bottom:12px;">
-          <strong style="font-size:14px;">◉ AI Analysis</strong>
-          <strong style="font-size:14px;">◉ AI Analysis</strong>
+          <strong style="font-size:14px;"> AI Analysis</strong>
+
         </div>
         
         <div style="background:rgba(255,255,255,0.15); padding:12px; border-radius:6px; margin-bottom:10px;">
