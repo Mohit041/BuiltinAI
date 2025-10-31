@@ -18,6 +18,10 @@ let chartSelectionActive = false;
 let chartSelectionOverlay = null;
 let chartStartX = 0, chartStartY = 0;
 
+// Sidebar resize variables
+let isResizing = false;
+let sidebarWidth = 380;
+
 // Initialize AI Generator
 function initializeAI() {
   if (!aiGenerator) {
@@ -75,13 +79,17 @@ function parseTableElement(table) {
 function createSidebar() {
   if (document.getElementById("smartTableSidebar")) return;
 
+  // Adjust body margin for sidebar
+  document.body.style.marginRight = sidebarWidth + "px";
+  document.body.style.transition = "margin-right 0.3s ease";
+
   sidebar = document.createElement("div");
   sidebar.id = "smartTableSidebar";
   sidebar.style.cssText = `
     position: fixed;
     top: 0;
     right: 0;
-    width: 380px;
+    width: ${sidebarWidth}px;
     height: 100%;
     background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     box-shadow: -4px 0 20px rgba(0,0,0,0.3);
@@ -169,7 +177,26 @@ function createSidebar() {
   document.head.appendChild(style);
 
   sidebar.innerHTML = `
-    <div style="background: rgba(255,255,255,0.15); padding: 20px; backdrop-filter: blur(10px);">
+    <div style="background: rgba(255,255,255,0.15); padding: 20px; backdrop-filter: blur(10px); position: relative;">
+      <button id="closeSidebarBtn" style="
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        width: 20px;
+        height: 20px;
+        border: none;
+        background: rgba(255,255,255,0.2);
+        color: white;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: background 0.2s;
+      " onmouseover="this.style.background='rgba(255,255,255,0.4)'" onmouseout="this.style.background='rgba(255,255,255,0.2)'">
+        ✕
+      </button>
       <h2 style="margin: 0; color: white; font-size: 24px; font-weight: 700; text-shadow: 0 2px 4px rgba(0,0,0,0.2);">
         🚀 Smart Table Extractor
       </h2>
@@ -278,13 +305,33 @@ Examples:
         </button>
         <textarea id="jsonView" style="width:100%; height:150px; display:none; font-family:'Courier New', monospace; font-size:11px; margin-top:8px; padding:12px; border:2px solid #e0e0e0; border-radius:8px; background:#f8f9fa; resize: vertical;"></textarea>
       </div>
-      
-      <!-- Close Button -->
-      <button id="closeSidebarBtn" class="sidebar-button" style="background: linear-gradient(135deg, #eb3349 0%, #f45c43 100%); color: white; margin-top: 16px; font-weight: 600;">
-        ✕ Close Panel
-      </button>
     </div>
   `;
+
+  // Add resize handle AFTER innerHTML
+  const resizeHandle = document.createElement('div');
+  resizeHandle.style.cssText = `
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: rgba(255,255,255,0.3);
+    cursor: ew-resize;
+    z-index: 100000;
+    transition: background 0.2s ease;
+  `;
+  
+  resizeHandle.addEventListener('mouseenter', () => {
+    resizeHandle.style.background = 'rgba(255,255,255,0.6)';
+  });
+  
+  resizeHandle.addEventListener('mouseleave', () => {
+    if (!isResizing) resizeHandle.style.background = 'rgba(255,255,255,0.3)';
+  });
+  
+  resizeHandle.addEventListener('mousedown', startResize);
+  sidebar.appendChild(resizeHandle);
 
   document.body.appendChild(sidebar);
 
@@ -300,6 +347,38 @@ Examples:
   document.getElementById("viewJSONBtn").addEventListener("click", toggleJSONView);
   document.getElementById("selectChartBtn").addEventListener("click", startChartSelection);
   document.getElementById("closeSidebarBtn").addEventListener("click", closeSidebar);
+}
+
+// --- Sidebar Resize Functions ---
+function startResize(e) {
+  isResizing = true;
+  document.body.style.userSelect = 'none';
+  document.addEventListener('mousemove', handleResize);
+  document.addEventListener('mouseup', stopResize);
+  e.preventDefault();
+}
+
+function handleResize(e) {
+  if (!isResizing) return;
+  
+  const newWidth = window.innerWidth - e.clientX;
+  if (newWidth >= 250 && newWidth <= 800) {
+    sidebarWidth = newWidth;
+    sidebar.style.width = sidebarWidth + 'px';
+    document.body.style.marginRight = sidebarWidth + 'px';
+  }
+}
+
+function stopResize() {
+  isResizing = false;
+  document.body.style.userSelect = '';
+  document.removeEventListener('mousemove', handleResize);
+  document.removeEventListener('mouseup', stopResize);
+  
+  const resizeHandle = sidebar.querySelector('div');
+  if (resizeHandle) {
+    resizeHandle.style.background = 'rgba(255,255,255,0.3)';
+  }
 }
 
 // --- Rectangle selection ---
@@ -1180,6 +1259,9 @@ function closeSidebar() {
     chartGenerator.destroy();
     chartGenerator = null;
   }
+  
+  // Reset body margin when closing sidebar
+  document.body.style.marginRight = "0";
   
   if (sidebar) {
     sidebar.remove();
