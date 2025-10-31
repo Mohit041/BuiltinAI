@@ -197,16 +197,12 @@ function createSidebar() {
         transition: background 0.2s;
       " onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
         ×
-        ×
       </button>
       <h2 style="margin: 0; color: #000000; font-size: 24px; font-weight: 700; text-shadow: 0 1px 2px rgba(255, 255, 255, 0.8);">
         📊 DataGlance
       </h2>
       <p style="margin: 8px 0 0 0; color: rgba(0, 0, 0, 0.8); font-size: 13px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);">
         Extract tables and analyze charts with AI-powered insights
-      <p style="margin: 8px 0 0 0; color: rgba(0, 0, 0, 0.8); font-size: 13px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.6);">
-        Extract tables and analyze charts with AI-powered insights
-      </p>
     </div>
     
     <div style="padding: 20px;">
@@ -272,11 +268,9 @@ Examples:
           <span>▼</span>
           <span>Export Data</span>
         </h3>
-        <div style="display: flex; justify-content: center;">
-          <button id="downloadCSVBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(245, 250, 245, 0.9), rgba(240, 248, 240, 0.9)); color: #000000; font-size: 14px; padding: 12px; width: 120px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
-            📄 CSV
-          </button>
-        </div>
+        <button id="downloadCSVBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(245, 250, 245, 0.9), rgba(240, 248, 240, 0.9)); color: #000000; font-size: 15px; padding: 14px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
+          📄 Download as CSV
+        </button>
         <textarea id="jsonView" style="width: 100%; height: 160px; display: none; font-family: 'SF Mono', 'Monaco', 'Cascadia Code', monospace; font-size: 12px; margin-top: 16px; padding: 16px; border: 2px solid #e2e8f0; border-radius: 12px; background: #f8fafc; resize: vertical; line-height: 1.4;"></textarea>
       </div>
     </div>
