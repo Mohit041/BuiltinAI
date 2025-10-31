@@ -220,20 +220,14 @@ function createSidebar() {
             👁️ Preview Selected Data
           </button>
           <button id="loadToSQLBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(240, 248, 240, 0.9), rgba(245, 250, 245, 0.9)); color: #000000; font-size: 15px; padding: 14px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
-            🚀 Prepare for Queries
+            🚀 Query Table
           </button>
         </div>
         
         <div id="tablePreview" style="margin-top: 16px; max-height: 320px; overflow: auto; display: none; border: 2px solid #e2e8f0; border-radius: 12px; padding: 16px; background: #ffffff;"></div>
         
-        <textarea id="nlQueryInput" placeholder="◦ Ask questions about your data...
-        <textarea id="nlQueryInput" placeholder="◦ Ask questions about your data...
-
-Examples:
-• Show top 10 rows
-• What's the average of column X?
-• Count unique values in Y
-• Filter where Z > 100" style="width: 100%; height: 100px; margin-top: 16px; display: none; padding: 16px; font-size: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; resize: vertical; line-height: 1.5;"></textarea>
+        <textarea id="nlQueryInput" placeholder="◦ Ask questions about your data..."
+ style="width: 100%; height: 100px; margin-top: 16px; display: none; padding: 16px; font-size: 14px; border: 2px solid #e2e8f0; border-radius: 12px; font-family: inherit; resize: vertical; line-height: 1.5;"></textarea>
         
         <button id="executeNLQueryBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(245, 250, 245, 0.9), rgba(240, 248, 240, 0.9)); color: #000000; display: none; margin-top: 12px; font-size: 15px; padding: 14px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
           🔍 Execute Query
@@ -257,7 +251,7 @@ Examples:
           <span>Chart Insights</span>
         </h3>
         <button id="selectChartBtn" class="sidebar-button" style="background: linear-gradient(135deg, rgba(240, 248, 240, 0.9), rgba(245, 250, 245, 0.9)); color: #000000; font-size: 15px; padding: 14px; text-shadow: 0 1px 1px rgba(255, 255, 255, 0.8);">
-          📸 Analyze Chart or Image
+          📸 Analyze Chart 
         </button>
         <div id="chartAnalysisResults" style="margin-top: 16px; max-height: 450px; overflow: auto; display: none; border-radius: 12px;"></div>
       </div>
